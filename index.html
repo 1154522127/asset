@@ -1,1206 +1,2988 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#0F766E" />
-  <title>轻记 · 记账</title>
-  <style>
-    :root {
-      --bg: #f3f6f5;
-      --bg-elevated: #ffffff;
-      --ink: #12201e;
-      --ink-soft: #5b6b68;
-      --ink-muted: #8a9a96;
-      --line: rgba(18, 32, 30, 0.08);
-      --teal: #0f766e;
-      --teal-deep: #0b5f59;
-      --teal-soft: #e6f4f2;
-      --income: #059669;
-      --expense: #e11d48;
-      --warn: #d97706;
-      --shadow: 0 10px 30px rgba(15, 118, 110, 0.08);
-      --radius: 18px;
-      --safe-b: env(safe-area-inset-bottom, 0px);
-      --safe-t: env(safe-area-inset-top, 0px);
-      --nav-h: 72px;
-      --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
-      --num: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#FFF8EE" />
+    <title>assets</title>
+    <style>
+      :root {
+        --bg: #fff8ee;
+        --card: #ffffff;
+        --ink: #222222;
+        --muted: #9a9a9a;
+        --line: #ece6dc;
+        --pink: #db7c93;
+        --pink-soft: #fcdfe8;
+        --pink-bar: #f37289;
+        --yellow: #ffd45c;
+        --yellow-soft: #fef9e6;
+        --yellow-cell: #fff9e6;
+        --pink-today: #fde4e9;
+        --red-selected: #e3808d;
+        --month-start: #e3808d;
+        --gray-future: #f3f3f3;
+        --cell-amt: #9a9488;
+        --today-amt: #b36d79;
+        --sum-label: #6f6f6f;
+        --expense: #c47a3a;
+        --income: #3a8f5a;
+        --border: #2b2b2b;
+        --safe-b: env(safe-area-inset-bottom, 0px);
+        --safe-t: env(safe-area-inset-top, 0px);
+        --nav-h: 72px;
+        --font:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+          "Microsoft YaHei", sans-serif;
+      }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; }
-    body {
-      font-family: var(--font);
-      color: var(--ink);
-      background:
-        radial-gradient(120% 80% at 0% 0%, rgba(15, 118, 110, 0.10), transparent 55%),
-        radial-gradient(90% 60% at 100% 10%, rgba(217, 119, 6, 0.08), transparent 50%),
-        var(--bg);
-      overflow: hidden;
-    }
-
-    /* Desktop: phone frame for调试 */
-    .phone {
-      width: 100%;
-      height: 100%;
-      max-width: 430px;
-      margin: 0 auto;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      background: transparent;
-      overflow: hidden;
-    }
-    @media (min-width: 480px) {
-      body { display: grid; place-items: center; padding: 24px; }
-      .phone {
-        height: min(900px, 100dvh - 48px);
-        border-radius: 28px;
-        box-shadow: 0 25px 80px rgba(15, 40, 36, 0.18);
-        border: 1px solid rgba(255,255,255,0.6);
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: var(--font);
+        color: var(--ink);
         background: var(--bg);
         overflow: hidden;
       }
-    }
 
-    .screen {
-      flex: 1;
-      overflow: hidden;
-      display: none;
-      flex-direction: column;
-      position: relative;
-    }
-    .screen.active { display: flex; }
+      .phone {
+        width: 100%;
+        height: 100%;
+        max-width: 430px;
+        margin: 0 auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='%23f0d9a8' fill-opacity='0.35'%3E%3Ccircle cx='18' cy='16' r='3.2'/%3E%3Ccircle cx='26' cy='16' r='3.2'/%3E%3Ccircle cx='16' cy='23' r='3.2'/%3E%3Ccircle cx='28' cy='23' r='3.2'/%3E%3Cellipse cx='22' cy='29' rx='6' ry='5'/%3E%3C/g%3E%3C/svg%3E")
+            repeat,
+          var(--bg);
+      }
+      @media (min-width: 480px) {
+        body {
+          display: grid;
+          place-items: center;
+          padding: 20px;
+          background: #f2e8d8;
+        }
+        .phone {
+          height: min(900px, 100dvh - 40px);
+          border-radius: 28px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+          border: 2px solid #e8dcc8;
+        }
+      }
 
-    .scroll {
-      flex: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: calc(var(--nav-h) + var(--safe-b) + 16px);
-    }
+      .screen {
+        display: none;
+        flex: 1;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .screen.active {
+        display: flex;
+      }
+      .scroll {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: calc(var(--safe-t) + 12px) 14px
+          calc(var(--nav-h) + var(--safe-b) + 18px);
+      }
 
-    /* Header */
-    .hero {
-      padding: calc(var(--safe-t) + 18px) 20px 22px;
-      background: linear-gradient(160deg, #0f766e 0%, #0d9488 45%, #14b8a6 100%);
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -40px; top: -40px;
-      width: 180px; height: 180px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-    }
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-    .brand {
-      font-family: var(--num);
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: 0.02em;
-    }
-    .month-switch {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.16);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .month-switch button {
-      border: 0; background: transparent; color: #fff;
-      width: 24px; height: 24px; border-radius: 50%;
-      display: grid; place-items: center; cursor: pointer;
-      font-size: 16px; line-height: 1;
-    }
-    .hero-summary {
-      margin-top: 22px;
-      position: relative;
-      z-index: 1;
-    }
-    .hero-label { font-size: 13px; opacity: 0.85; }
-    .hero-balance {
-      font-family: var(--num);
-      font-size: 36px;
-      font-weight: 700;
-      margin-top: 4px;
-      letter-spacing: -0.02em;
-    }
-    .hero-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .hero-chip {
-      background: rgba(255,255,255,0.14);
-      border-radius: 14px;
-      padding: 12px 14px;
-      backdrop-filter: blur(8px);
-    }
-    .hero-chip span { display: block; font-size: 12px; opacity: 0.85; }
-    .hero-chip strong {
-      display: block;
-      margin-top: 4px;
-      font-family: var(--num);
-      font-size: 18px;
-      font-weight: 600;
-    }
+      .sketch {
+        background: var(--card);
+        border: 2.5px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.04);
+      }
 
-    /* List */
-    .section-pad { padding: 0 16px; }
-    .day-group { margin-top: 16px; }
-    .day-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 0 4px 8px;
-      color: var(--ink-soft);
-      font-size: 13px;
-    }
-    .day-head .sum { font-family: var(--num); }
-    .card-list {
-      background: var(--bg-elevated);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .tx-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 14px;
-      border-bottom: 1px solid var(--line);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .tx-item:last-child { border-bottom: 0; }
-    .tx-item:active { background: #f7faf9; }
-    .tx-icon {
-      width: 42px; height: 42px; border-radius: 14px;
-      display: grid; place-items: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-    .tx-main { flex: 1; min-width: 0; }
-    .tx-title {
-      font-size: 15px; font-weight: 600;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .tx-sub {
-      margin-top: 2px; font-size: 12px; color: var(--ink-muted);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .tx-amount {
-      font-family: var(--num);
-      font-weight: 600;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-    .tx-amount.expense { color: var(--expense); }
-    .tx-amount.income { color: var(--income); }
+      .month-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .month-nav #home-month .mo-mark {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 2px;
+      }
+      .month-nav #home-month .mo-mark::after {
+        content: "";
+        position: absolute;
+        left: -2px;
+        right: -2px;
+        bottom: -1px;
+        height: 3px;
+        background: var(--pink-bar);
+        border-radius: 3px;
+        transform: skewX(-8deg) rotate(-1.5deg);
+      }
 
-    .empty {
-      text-align: center;
-      padding: 48px 24px;
-      color: var(--ink-muted);
-    }
-    .empty .emoji { font-size: 40px; margin-bottom: 10px; }
-    .empty p { font-size: 14px; line-height: 1.6; }
+      /* 统一左右翻页按钮（手绘箭头图） */
+      .flip-btn {
+        border: 0;
+        background: transparent;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .flip-btn img {
+        width: 28px;
+        height: 28px;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+      }
+      .flip-btn:active {
+        transform: scale(0.92);
+      }
 
-    /* Bottom nav */
-    .tabbar {
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: calc(var(--nav-h) + var(--safe-b));
-      padding: 0 4px var(--safe-b);
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      align-items: end;
-      z-index: 40;
-    }
-    .tab {
-      border: 0; background: transparent;
-      display: flex; flex-direction: column; align-items: center;
-      gap: 2px; padding: 10px 0 12px;
-      color: var(--ink-muted); font-size: 11px; cursor: pointer;
-      font-family: inherit;
-    }
-    .tab .ico { font-size: 20px; line-height: 1; }
-    .tab.active { color: var(--teal); font-weight: 600; }
-    .fab {
-      position: absolute;
-      left: 50%;
-      top: -22px;
-      transform: translateX(-50%);
-      width: 58px; height: 58px; border-radius: 50%;
-      border: 4px solid var(--bg);
-      background: linear-gradient(145deg, #14b8a6, #0f766e);
-      color: #fff; font-size: 30px; line-height: 1;
-      box-shadow: 0 12px 24px rgba(15, 118, 110, 0.35);
-      cursor: pointer;
-      display: grid; place-items: center;
-      z-index: 41;
-    }
-    .fab:active { transform: translateX(-50%) scale(0.94); }
+      /* ========== 日历格子（对齐示意图） ========== */
+      .cal-card {
+        padding: 14px 12px 16px;
+        margin-bottom: 12px;
+      }
+      .cal-week {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 5px;
+        text-align: center;
+        font-size: 12px;
+        color: #a8a8a8;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+      .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 5px;
+      }
+      /*
+        正方形方案：外层只负责占位与底色，
+        ::after 用 padding-top:100% 撑高（相对宽度），
+        内容绝对定位居中 —— 不受内容行数影响，灰格/黄格同尺寸。
+      */
+      .cal-cell {
+        position: relative;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 8px;
+        background: #f3f3f3;
+        color: #333;
+        font-family: inherit;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        overflow: hidden;
+      }
+      .cal-cell::after {
+        content: "";
+        display: block;
+        width: 100%;
+        padding-top: 100%;
+      }
+      .cal-cell .face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1px;
+        padding: 2px 1px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      .cal-cell .d {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #2a2a2a;
+      }
+      .cal-cell .up,
+      .cal-cell .dn {
+        font-size: 8px;
+        font-weight: 500;
+        line-height: 1.15;
+        color: #9a9488;
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+      }
 
-    /* Stats */
-    .page-head {
-      padding: calc(var(--safe-t) + 16px) 20px 12px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .page-title { font-size: 22px; font-weight: 700; font-family: var(--num); }
-    .seg {
-      display: inline-flex; background: #e8eeec; border-radius: 12px; padding: 3px;
-    }
-    .seg button {
-      border: 0; background: transparent; padding: 7px 14px;
-      border-radius: 10px; font-size: 13px; color: var(--ink-soft); cursor: pointer;
-      font-family: inherit;
-    }
-    .seg button.on {
-      background: #fff; color: var(--teal); font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .stat-card {
-      margin: 8px 16px 0;
-      background: var(--bg-elevated);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
-    }
-    .stat-total {
-      text-align: center; margin-bottom: 8px;
-    }
-    .stat-total .label { font-size: 13px; color: var(--ink-muted); }
-    .stat-total .val {
-      font-family: var(--num); font-size: 28px; font-weight: 700; margin-top: 4px;
-    }
-    .chart-wrap {
-      display: flex; justify-content: center; padding: 8px 0 4px;
-    }
-    .chart-wrap canvas { width: 200px; height: 200px; }
-    .legend { margin-top: 8px; }
-    .legend-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid var(--line);
-    }
-    .legend-row:last-child { border-bottom: 0; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .legend-name { flex: 1; font-size: 14px; }
-    .legend-pct { font-size: 12px; color: var(--ink-muted); width: 42px; text-align: right; }
-    .legend-amt { font-family: var(--num); font-weight: 600; font-size: 14px; min-width: 72px; text-align: right; }
+      /* 跨月：无底色，浅灰字 */
+      .cal-cell.out {
+        background: transparent;
+        cursor: default;
+        pointer-events: none;
+      }
+      .cal-cell.out .d {
+        color: #c8c8c8;
+        font-weight: 500;
+      }
 
-    /* Me / Settings */
-    .me-hero {
-      padding: calc(var(--safe-t) + 28px) 20px 24px;
-      background: linear-gradient(160deg, #134e4a, #0f766e);
-      color: #fff;
-    }
-    .me-hero h1 { font-size: 24px; font-family: var(--num); }
-    .me-hero p { margin-top: 6px; opacity: 0.8; font-size: 13px; }
-    .menu {
-      margin: 16px; background: var(--bg-elevated);
-      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
-    }
-    .menu-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px; border-bottom: 1px solid var(--line);
-      cursor: pointer; background: transparent; border-left: 0; border-right: 0; border-top: 0;
-      width: 100%; text-align: left; font-family: inherit; color: inherit; font-size: 15px;
-    }
-    .menu-item:last-child { border-bottom: 0; }
-    .menu-item:active { background: #f7faf9; }
-    .menu-ico {
-      width: 36px; height: 36px; border-radius: 12px;
-      display: grid; place-items: center; font-size: 18px;
-      background: var(--teal-soft);
-    }
-    .menu-item .arrow { margin-left: auto; color: var(--ink-muted); }
-    .menu-desc { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
-    .danger .menu-ico { background: #ffe4e6; }
-    .hint {
-      margin: 0 20px; font-size: 12px; color: var(--ink-muted); line-height: 1.6;
-    }
+      /* 无账：浅灰底，只显示日期 */
+      .cal-cell.zero {
+        background: #f3f3f3;
+      }
+      .cal-cell.zero .d {
+        color: #6a6a6a;
+      }
 
-    /* Overlay sheets */
-    .overlay {
-      position: absolute; inset: 0; z-index: 60;
-      background: rgba(10, 24, 22, 0.45);
-      display: none; align-items: flex-end;
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .overlay.show { display: flex; opacity: 1; }
-    .sheet {
-      width: 100%;
-      max-height: 92%;
-      background: var(--bg);
-      border-radius: 24px 24px 0 0;
-      transform: translateY(24px);
-      transition: transform 0.25s ease;
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      padding-bottom: var(--safe-b);
-    }
-    .overlay.show .sheet { transform: translateY(0); }
-    .sheet-head {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 18px 10px;
-    }
-    .sheet-head h2 { font-size: 17px; font-weight: 700; }
-    .sheet-close, .sheet-action {
-      border: 0; background: transparent; color: var(--teal);
-      font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
-      padding: 6px 4px;
-    }
-    .sheet-close { color: var(--ink-muted); font-weight: 500; }
-    .sheet-body { overflow-y: auto; padding: 0 16px 20px; flex: 1; }
+      /* 有账：米黄底 + 日期/收入/支出 */
+      .cal-cell.amt {
+        background: #fff9e6;
+      }
+      .cal-cell.amt .d {
+        color: #222;
+      }
 
-    /* Add form */
-    .type-tabs {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;
-    }
-    .type-tabs button {
-      border: 0; padding: 12px; border-radius: 14px;
-      font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
-      background: #e8eeec; color: var(--ink-soft);
-    }
-    .type-tabs button.on.expense { background: #ffe4e6; color: var(--expense); }
-    .type-tabs button.on.income { background: #d1fae5; color: var(--income); }
+      /* 当日：粉色（未选中时） */
+      .cal-cell.today:not(.on) {
+        background: #fde4e9;
+      }
+      .cal-cell.today:not(.on) .d {
+        color: #222;
+      }
+      .cal-cell.today:not(.on) .up,
+      .cal-cell.today:not(.on) .dn {
+        color: #b36d79;
+      }
 
-    .amount-box {
-      background: var(--bg-elevated);
-      border-radius: var(--radius);
-      padding: 18px 16px;
-      margin-bottom: 14px;
-      box-shadow: var(--shadow);
-    }
-    .amount-box label { font-size: 12px; color: var(--ink-muted); }
-    .amount-row {
-      display: flex; align-items: baseline; gap: 6px; margin-top: 4px;
-    }
-    .amount-row .yen { font-size: 24px; font-weight: 700; color: var(--ink-soft); }
-    .amount-row input {
-      border: 0; outline: 0; width: 100%;
-      font-family: var(--num); font-size: 36px; font-weight: 700;
-      background: transparent; color: var(--ink);
-    }
+      /* 月初只换月名文案，底色跟 zero/amt/today/on 走 */
+      .cal-cell.start .d {
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
 
-    .cat-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-      margin-bottom: 14px;
-    }
-    .cat-btn {
-      border: 0; background: var(--bg-elevated);
-      border-radius: 16px; padding: 12px 6px;
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      cursor: pointer; font-family: inherit; color: var(--ink);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      border: 2px solid transparent;
-    }
-    .cat-btn .ci {
-      width: 40px; height: 40px; border-radius: 14px;
-      display: grid; place-items: center; font-size: 20px;
-    }
-    .cat-btn span { font-size: 12px; }
-    .cat-btn.on { border-color: var(--teal); background: var(--teal-soft); }
+      /* 选中：红色底 + 白字（优先级最高） */
+      .cal-cell.on {
+        background: #e3808d;
+        box-shadow: none;
+      }
+      .cal-cell.on .d {
+        color: #fff;
+      }
+      .cal-cell.on .up,
+      .cal-cell.on .dn {
+        color: rgba(255, 255, 255, 0.95);
+      }
 
-    .field {
-      background: var(--bg-elevated);
-      border-radius: 14px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    }
-    .field label { font-size: 13px; color: var(--ink-muted); width: 52px; flex-shrink: 0; }
-    .field input, .field select {
-      border: 0; outline: 0; flex: 1; background: transparent;
-      font-size: 15px; font-family: inherit; color: var(--ink);
-    }
+      .month-sum {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 14px;
+        padding: 13px 4px 2px;
+        border-top: 1px solid #ececec;
+        font-size: 13px;
+      }
+      .month-sum .sum-label {
+        color: #6f6f6f;
+        font-weight: 500;
+      }
+      .month-sum .sum-val {
+        color: #b36d79;
+        font-weight: 600;
+      }
 
-    .btn-primary {
-      width: 100%; border: 0; border-radius: 16px;
-      padding: 15px; font-size: 16px; font-weight: 700;
-      font-family: inherit; color: #fff; cursor: pointer;
-      background: linear-gradient(145deg, #14b8a6, #0f766e);
-      box-shadow: 0 10px 24px rgba(15, 118, 110, 0.28);
-      margin-top: 8px;
-    }
-    .btn-primary:active { opacity: 0.9; }
-    .btn-danger {
-      width: 100%; border: 0; border-radius: 16px;
-      padding: 14px; margin-top: 10px;
-      background: #ffe4e6; color: var(--expense);
-      font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer;
-    }
+      .day-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 4px 0 8px;
+        font-size: 14px;
+      }
+      .day-head .left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+      }
+      .day-head .bar {
+        width: 5px;
+        height: 16px;
+        background: var(--yellow);
+        border-radius: 2px;
+      }
+      .day-head .bal {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 500;
+      }
 
-    /* Toast */
-    .toast {
-      position: absolute; left: 50%; bottom: calc(var(--nav-h) + var(--safe-b) + 20px);
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(18, 32, 30, 0.9); color: #fff;
-      padding: 10px 18px; border-radius: 999px;
-      font-size: 13px; z-index: 80; opacity: 0;
-      pointer-events: none; transition: all 0.25s; white-space: nowrap;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+      .tx-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 2px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+        background: transparent;
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        color: inherit;
+      }
+      .tx-row:last-child {
+        border-bottom: 0;
+      }
+      .tx-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--pink-soft);
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .tx-name {
+        flex: 1;
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .tx-amt {
+        font-size: 15px;
+        font-weight: 600;
+      }
 
-    .hidden-file { display: none; }
-  </style>
-</head>
-<body>
-  <div class="phone" id="app">
-    <!-- 明细 -->
-    <section class="screen active" id="screen-home">
-      <div class="scroll" id="home-scroll">
-        <header class="hero">
-          <div class="hero-top">
-            <div class="brand">轻记</div>
-            <div class="month-switch">
-              <button type="button" id="prev-month" aria-label="上一月">‹</button>
-              <span id="month-label">2026年7月</span>
-              <button type="button" id="next-month" aria-label="下一月">›</button>
+      .empty {
+        text-align: center;
+        color: var(--muted);
+        padding: 28px 12px;
+        font-size: 14px;
+      }
+
+      /* Summary card (明细 / 统计) */
+      .sum-card {
+        padding: 16px 16px 12px;
+        margin-bottom: 16px;
+      }
+      .sum-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 14px;
+      }
+      .sum-top .label {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .sum-top .val {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--pink);
+        letter-spacing: -0.02em;
+      }
+      .bar-row {
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 13px;
+      }
+      .bar-track {
+        height: 14px;
+        background: #f3efe6;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        min-width: 0;
+      }
+      .bar-fill.exp {
+        background: var(--yellow);
+      }
+      .bar-fill.inc {
+        background: var(--pink-bar);
+      }
+      .bar-amt {
+        font-size: 13px;
+        font-weight: 600;
+        min-width: 88px;
+        text-align: right;
+      }
+
+      .sec-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 4px 0 10px;
+      }
+      .sec-head h2 {
+        font-size: 20px;
+        font-weight: 800;
+      }
+      .group {
+        margin-bottom: 8px;
+      }
+      .group-head {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 2px 6px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      /* Stats */
+      .year-title {
+        margin-bottom: 12px;
+        text-align: right;
+      }
+      .year-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 0;
+        background: transparent;
+        font-family: inherit;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--ink);
+        cursor: pointer;
+        padding: 4px 0;
+      }
+      .year-trigger .cal-icon {
+        width: 26px;
+        height: 26px;
+        display: block;
+        flex-shrink: 0;
+        margin-left: 2px;
+      }
+      .year-trigger .cal-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .list-title-wrap {
+        margin-bottom: 12px;
+        text-align: right;
+      }
+
+      .year-picker-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 8px 14px;
+      }
+      .year-picker-head .title {
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .year-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 0 4px 8px;
+      }
+      .year-cell {
+        border: 0;
+        background: transparent;
+        border-radius: 12px;
+        padding: 14px 0;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .month-cell.on,
+      .year-cell.on {
+        background: var(--red-selected);
+        color: #fff;
+        box-shadow: none;
+        transform: none;
+      }
+      .stats-all-btn {
+        display: block;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        border-radius: 12px;
+        padding: 14px 0;
+        margin: 0 0 10px;
+        font-size: 16px;
+        font-weight: 700;
+        font-family: inherit;
+        color: var(--ink);
+        cursor: pointer;
+        text-align: center;
+        transform: none;
+        box-shadow: none;
+      }
+      .stats-all-btn.on {
+        background: var(--red-selected);
+        color: #fff;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .period-tabs {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+        height: 48px;
+        flex-shrink: 0;
+        margin-bottom: 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      .period-tabs button {
+        border: 0;
+        background: transparent;
+        height: 48px;
+        padding: 0 4px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+        font-family: inherit;
+        cursor: pointer;
+        position: relative;
+        line-height: 48px;
+      }
+      .period-tabs button.on {
+        color: var(--pink);
+        font-weight: 800;
+      }
+      .period-tabs button.on::after {
+        content: "";
+        position: absolute;
+        left: 18%;
+        right: 18%;
+        bottom: 0;
+        height: 3px;
+        background: var(--pink);
+        border-radius: 3px 3px 0 0;
+      }
+      .period-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        height: 54px;
+        padding: 0;
+        font-size: 15px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .period-nav #period-nav-label .mo-mark {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 2px;
+      }
+      .period-nav #period-nav-label .mo-mark::after {
+        content: "";
+        position: absolute;
+        left: -2px;
+        right: -2px;
+        bottom: -1px;
+        height: 3px;
+        background: var(--pink-bar);
+        border-radius: 3px;
+        transform: skewX(-8deg) rotate(-1.5deg);
+      }
+      .month-grid,
+      #period-body .year-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 0 4px 10px;
+        align-content: start;
+        min-height: 260px;
+      }
+      #period-body {
+        min-height: 260px;
+      }
+      #overlay-period .sheet,
+      #overlay-year .sheet {
+        background: #fff;
+        position: relative;
+        overflow: visible;
+      }
+      #overlay-period .sheet {
+        height: 62%;
+        max-height: 62%;
+      }
+      #overlay-period .sheet::before,
+      #overlay-year .sheet::before {
+        content: "";
+        position: absolute;
+        right: 22px;
+        top: -34px;
+        width: 52px;
+        height: 48px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56' fill='none'%3E%3Ccircle cx='32' cy='34' r='16' fill='%23ffe8a8' stroke='%232b2b2b' stroke-width='2.2'/%3E%3Cpath d='M17 24l5-10 7 8M47 24l-5-10-7 8' fill='%23ffc4a8' stroke='%232b2b2b' stroke-width='2.1' stroke-linejoin='round'/%3E%3Ccircle cx='25.5' cy='33' r='2' fill='%232b2b2b'/%3E%3Ccircle cx='38.5' cy='33' r='2' fill='%232b2b2b'/%3E%3Cpath d='M28.5 39c2 2.2 5 2.2 7 0' stroke='%232b2b2b' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M30.5 36.2h3' stroke='%23f37289' stroke-width='1.6' stroke-linecap='round'/%3E%3Cellipse cx='22' cy='38' rx='3.2' ry='2' fill='%23f9b4c0' opacity='0.75'/%3E%3Cellipse cx='42' cy='38' rx='3.2' ry='2' fill='%23f9b4c0' opacity='0.75'/%3E%3C/svg%3E")
+          center / contain no-repeat;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .month-cell {
+        border: 0;
+        background: transparent;
+        border-radius: 12px;
+        height: 56px;
+        padding: 0;
+        font-size: 15px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--ink);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.25;
+      }
+      .table-card {
+        overflow: hidden;
+        padding: 0;
+      }
+      .table-head {
+        display: grid;
+        grid-template-columns: 56px 1fr 1fr 1fr 18px;
+        gap: 4px;
+        background: var(--yellow);
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .table-head span:first-child {
+        text-align: left;
+      }
+      .table-row {
+        display: grid;
+        grid-template-columns: 56px 1fr 1fr 1fr 18px;
+        gap: 4px;
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+        align-items: center;
+        text-align: center;
+        background: transparent;
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+        width: 100%;
+        font-family: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      .table-row:last-child {
+        border-bottom: 0;
+      }
+      .table-row span:first-child {
+        text-align: left;
+        font-weight: 700;
+      }
+      .table-row .chev {
+        color: #bbb;
+      }
+
+      /* Me */
+      .me-card {
+        padding: 20px 16px;
+        margin-bottom: 14px;
+      }
+      .me-card h1 {
+        font-size: 24px;
+        font-weight: 800;
+      }
+      .me-card p {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .menu-card {
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 14px 14px;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: transparent;
+        font-family: inherit;
+        font-size: 15px;
+        color: inherit;
+        cursor: pointer;
+        text-align: left;
+      }
+      .menu-item:last-child {
+        border-bottom: 0;
+      }
+      .menu-item .mi {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--pink-soft);
+        display: grid;
+        place-items: center;
+        font-size: 16px;
+      }
+      .menu-item .arrow {
+        margin-left: auto;
+        color: #ccc;
+      }
+      .menu-item .desc {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+        padding: 0 4px;
+      }
+
+      /* Tabbar - yellow doodle bar with center notch */
+      .tabbar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: calc(var(--nav-h) + var(--safe-b));
+        padding: 0 2px var(--safe-b);
+        background: transparent;
+        display: grid;
+        grid-template-columns: 1fr 1fr 72px 1fr 1fr;
+        align-items: end;
+        z-index: 30;
+      }
+      .tabbar-bg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: calc(56px + var(--safe-b));
+        pointer-events: none;
+        z-index: 0;
+      }
+      .tabbar-bg svg {
+        width: 100%;
+        height: 56px;
+        display: block;
+      }
+      .tab {
+        position: relative;
+        z-index: 1;
+        border: 0;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 0 0 8px;
+        color: #555;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .tab .ico {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+      }
+      .tab .ico svg {
+        width: 34px;
+        height: 34px;
+        display: block;
+      }
+      .tab.active {
+        color: #1f1f1f;
+        font-weight: 800;
+      }
+      .tab.active .ico {
+        transform: translateY(-1px);
+      }
+      .fab-slot {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+      }
+      .fab {
+        position: absolute;
+        left: 50%;
+        top: 4px;
+        transform: translateX(-50%);
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 3px solid #2b2b2b;
+        background: #fff;
+        color: #2b2b2b;
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.14);
+        padding: 0 0 3px;
+      }
+      .fab:active {
+        transform: translateX(-50%) scale(0.94);
+      }
+
+      /* Overlay / sheet */
+      .overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        background: rgba(0, 0, 0, 0.35);
+        display: none;
+        align-items: flex-end;
+      }
+      .overlay.show {
+        display: flex;
+      }
+      .sheet {
+        width: 100%;
+        max-height: 92%;
+        background: var(--bg);
+        border-radius: 22px 22px 0 0;
+        border-top: 2.5px solid var(--border);
+        padding-bottom: var(--safe-b);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .sheet-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px 8px;
+      }
+      .sheet-head h3 {
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .sheet-head button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font-size: 14px;
+        cursor: pointer;
+        font-family: inherit;
+        padding: 6px;
+      }
+      .sheet-head .save {
+        color: var(--pink);
+        font-weight: 700;
+      }
+      .sheet-body {
+        overflow-y: auto;
+        padding: 0 14px 18px;
+      }
+
+      .type-seg {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .type-seg button {
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 10px;
+        background: #fff;
+        font-family: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        color: var(--muted);
+      }
+      .type-seg button.on.expense {
+        background: var(--yellow-soft);
+        color: var(--expense);
+      }
+      .type-seg button.on.income {
+        background: var(--pink-soft);
+        color: var(--pink);
+      }
+
+      .amount-box {
+        border: 2.5px solid var(--border);
+        border-radius: 16px;
+        background: #fff;
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+      .amount-box label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .amount-box .row {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        margin-top: 4px;
+      }
+      .amount-box .yen {
+        font-size: 22px;
+        font-weight: 800;
+      }
+      .amount-box input {
+        border: 0;
+        outline: 0;
+        width: 100%;
+        font-size: 32px;
+        font-weight: 800;
+        font-family: inherit;
+        background: transparent;
+      }
+
+      .cat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .cat-btn {
+        border: 2px solid transparent;
+        background: #fff;
+        border-radius: 14px;
+        padding: 10px 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+      }
+      .cat-btn .ci {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--pink-soft);
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+      }
+      .cat-btn.on {
+        border-color: var(--pink);
+        background: #fff5f8;
+      }
+
+      .field {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+      }
+      .field label {
+        width: 40px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .field input {
+        border: 0;
+        outline: 0;
+        flex: 1;
+        font-size: 15px;
+        font-family: inherit;
+        background: transparent;
+      }
+      .field .date-trigger {
+        border: 0;
+        outline: 0;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 0;
+        background: transparent;
+        font-size: 15px;
+        font-family: inherit;
+        color: var(--ink);
+        cursor: pointer;
+        text-align: left;
+      }
+      .field .date-trigger .cal-ico {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        color: var(--muted);
+      }
+
+      /* 手绘风日期选择器 */
+      #overlay-datepicker {
+        z-index: 60;
+      }
+      .dp-sheet {
+        position: relative;
+        width: 100%;
+        background: #fff;
+        border-radius: 28px 28px 0 0;
+        border-top: 2.5px solid var(--border);
+        padding: 18px 18px calc(18px + var(--safe-b));
+        overflow: visible;
+      }
+      .dp-cat {
+        position: absolute;
+        right: 22px;
+        top: -34px;
+        width: 52px;
+        height: 48px;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .dp-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        padding: 4px 2px 0;
+      }
+      .dp-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: 0.02em;
+      }
+      .dp-title .yr {
+        color: #888;
+        font-weight: 600;
+      }
+      .dp-title .mo {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 2px;
+      }
+      .dp-title .mo::after {
+        content: "";
+        position: absolute;
+        left: -2px;
+        right: -2px;
+        bottom: -1px;
+        height: 4px;
+        background: var(--pink-bar);
+        border-radius: 3px;
+        transform: skewX(-8deg) rotate(-1.5deg);
+        opacity: 0.95;
+      }
+      .dp-week {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+      }
+      .dp-week .wknd {
+        color: var(--pink-bar);
+      }
+      .dp-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px 2px;
+      }
+      .dp-cell {
+        aspect-ratio: 1;
+        border: 0;
+        background: transparent;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--ink);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+      .dp-cell.out {
+        color: #d0d0d0;
+      }
+      .dp-cell.on {
+        color: #fff;
+        background: var(--red-selected);
+        border-radius: 12px;
+        box-shadow: none;
+        transform: none;
+      }
+
+      .btn-main {
+        width: 100%;
+        border: 2.5px solid var(--border);
+        border-radius: 14px;
+        background: var(--red-selected);
+        color: #fff;
+        font-size: 16px;
+        font-weight: 800;
+        padding: 13px;
+        margin-top: 6px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn-danger {
+        width: 100%;
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        background: #fff;
+        color: #e14b4b;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 12px;
+        margin-top: 10px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .toast {
+        position: absolute;
+        left: 50%;
+        bottom: calc(var(--nav-h) + var(--safe-b) + 16px);
+        transform: translateX(-50%) translateY(12px);
+        background: rgba(40, 40, 40, 0.9);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.2s;
+        z-index: 80;
+        white-space: nowrap;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone" id="app">
+      <!-- 主界面：日历 -->
+      <section class="screen active" id="screen-home">
+        <div class="scroll">
+          <div class="month-nav">
+            <button type="button" class="flip-btn" id="home-prev" aria-label="上个月">
+              <img src="assets/nav-prev.svg" alt="" />
+            </button>
+            <span id="home-month">2026年 07月</span>
+            <button type="button" class="flip-btn" id="home-next" aria-label="下个月">
+              <img src="assets/nav-next.svg" alt="" />
+            </button>
+          </div>
+          <div class="sketch cal-card">
+            <div class="cal-week">
+              <span class="wknd">日</span><span>一</span><span>二</span
+              ><span>三</span><span>四</span><span>五</span
+              ><span class="wknd">六</span>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+            <div class="month-sum">
+              <span id="home-income"
+                ><span class="sum-label">本月收入:</span>
+                <span class="sum-val">¥ 0.00</span></span
+              >
+              <span id="home-expense"
+                ><span class="sum-label">本月支出:</span>
+                <span class="sum-val">¥ 0.00</span></span
+              >
             </div>
           </div>
-          <div class="hero-summary">
-            <div class="hero-label">本月结余</div>
-            <div class="hero-balance" id="balance">¥0.00</div>
-            <div class="hero-row">
-              <div class="hero-chip">
-                <span>收入</span>
-                <strong id="income-sum">¥0.00</strong>
+
+          <div class="day-head">
+            <div class="left">
+              <span class="bar"></span><span id="day-label">今天</span>
+            </div>
+            <div class="bal" id="day-balance">结余: ¥0.00</div>
+          </div>
+          <div id="day-list"></div>
+        </div>
+      </section>
+
+      <!-- 明细 -->
+      <section class="screen" id="screen-list">
+        <div class="scroll">
+          <div class="list-title-wrap">
+            <button type="button" class="year-trigger" id="list-period-btn">
+              <span id="list-period-label">2026年07月的账目明细</span>
+              <span class="cal-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M5.2 9.2c0-1.2.9-2.1 2-2.1h17.6c1.1 0 2 .9 2 2.1v16.2c0 1.3-1 2.3-2.2 2.3H7.3c-1.2 0-2.1-1-2.1-2.3V9.2z"
+                    fill="#fff"
+                    stroke="#2b2b2b"
+                    stroke-width="2.1"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M5.2 9.2c0-1.2.9-2.1 2-2.1h17.6c1.1 0 2 .9 2 2.1v4.6H5.2V9.2z"
+                    fill="#ffd45c"
+                    stroke="#2b2b2b"
+                    stroke-width="2.1"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M10.2 4.2c0 0 .1 3.8.1 4.6M21.8 4.2c0 0-.1 3.8-.1 4.6"
+                    stroke="#2b2b2b"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M8.8 4.6c.6-1.4 2.2-1.4 2.8 0M20.4 4.6c.6-1.4 2.2-1.4 2.8 0"
+                    stroke="#2b2b2b"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M9.2 17.8h13.2M9.2 21.4h11.2M9.2 25h8.4"
+                    stroke="#2b2b2b"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div class="sketch sum-card">
+            <div class="sum-top">
+              <span class="label" id="list-bal-label">本月结余</span>
+              <span class="val" id="list-balance">¥0.00</span>
+            </div>
+            <div class="bar-row">
+              <span id="list-exp-label">本月支出</span>
+              <div class="bar-track">
+                <div class="bar-fill exp" id="list-exp-bar"></div>
               </div>
-              <div class="hero-chip">
-                <span>支出</span>
-                <strong id="expense-sum">¥0.00</strong>
+              <span class="bar-amt" id="list-exp">¥0.00</span>
+            </div>
+            <div class="bar-row">
+              <span id="list-inc-label">本月收入</span>
+              <div class="bar-track">
+                <div class="bar-fill inc" id="list-inc-bar"></div>
+              </div>
+              <span class="bar-amt" id="list-inc">¥0.00</span>
+            </div>
+          </div>
+
+          <div class="sec-head">
+            <h2>收支记录</h2>
+          </div>
+          <div id="list-tx"></div>
+        </div>
+      </section>
+
+      <!-- 统计 -->
+      <section class="screen" id="screen-stats">
+        <div class="scroll">
+          <div class="year-title">
+            <button type="button" class="year-trigger" id="stats-year-btn">
+              <span id="stats-year">2026年的账单</span>
+              <span class="cal-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M5.2 9.2c0-1.2.9-2.1 2-2.1h17.6c1.1 0 2 .9 2 2.1v16.2c0 1.3-1 2.3-2.2 2.3H7.3c-1.2 0-2.1-1-2.1-2.3V9.2z"
+                    fill="#fff"
+                    stroke="#2b2b2b"
+                    stroke-width="2.1"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M5.2 9.2c0-1.2.9-2.1 2-2.1h17.6c1.1 0 2 .9 2 2.1v4.6H5.2V9.2z"
+                    fill="#ffd45c"
+                    stroke="#2b2b2b"
+                    stroke-width="2.1"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M10.2 4.2c0 0 .1 3.8.1 4.6M21.8 4.2c0 0-.1 3.8-.1 4.6"
+                    stroke="#2b2b2b"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M8.8 4.6c.6-1.4 2.2-1.4 2.8 0M20.4 4.6c.6-1.4 2.2-1.4 2.8 0"
+                    stroke="#2b2b2b"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M9.2 17.8h13.2M9.2 21.4h11.2M9.2 25h8.4"
+                    stroke="#2b2b2b"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div class="sketch sum-card">
+            <div class="sum-top">
+              <span class="label" id="stats-bal-label">本年结余</span>
+              <span class="val" id="year-balance">¥0.00</span>
+            </div>
+            <div class="bar-row">
+              <span id="stats-exp-label">本年支出</span>
+              <div class="bar-track">
+                <div class="bar-fill exp" id="year-exp-bar"></div>
+              </div>
+              <span class="bar-amt" id="year-exp">¥0.00</span>
+            </div>
+            <div class="bar-row">
+              <span id="stats-inc-label">本年收入</span>
+              <div class="bar-track">
+                <div class="bar-fill inc" id="year-inc-bar"></div>
+              </div>
+              <span class="bar-amt" id="year-inc">¥0.00</span>
+            </div>
+          </div>
+
+          <h2
+            id="stats-list-title"
+            style="font-size: 18px; font-weight: 800; margin: 4px 0 10px"
+          >
+            账单列表
+          </h2>
+
+          <div class="sketch table-card">
+            <div class="table-head">
+              <span id="stats-col-label">月份</span><span>支出</span
+              ><span>收入</span><span>结余</span><span></span>
+            </div>
+            <div id="month-table"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 我的 -->
+      <section class="screen" id="screen-me">
+        <div class="scroll">
+          <div class="sketch me-card">
+            <h1>assets</h1>
+            <p>粉黄手绘风 · 数据只保存在本机</p>
+          </div>
+          <div class="sketch menu-card">
+            <button type="button" class="menu-item" id="btn-export">
+              <span class="mi">📤</span>
+              <span
+                ><b>导出账单</b><span class="desc">导出 JSON 备份</span></span
+              >
+              <span class="arrow">›</span>
+            </button>
+            <button type="button" class="menu-item" id="btn-import">
+              <span class="mi">📥</span>
+              <span><b>导入账单</b><span class="desc">从 JSON 恢复</span></span>
+              <span class="arrow">›</span>
+            </button>
+            <button type="button" class="menu-item" id="btn-export-csv">
+              <span class="mi">📊</span>
+              <span
+                ><b>导出 CSV</b><span class="desc">可用表格软件打开</span></span
+              >
+              <span class="arrow">›</span>
+            </button>
+          </div>
+          <div class="sketch menu-card">
+            <button type="button" class="menu-item" id="btn-clear">
+              <span class="mi">🗑</span>
+              <span
+                ><b>清空全部数据</b><span class="desc">请先导出备份</span></span
+              >
+              <span class="arrow">›</span>
+            </button>
+          </div>
+          <p class="hint">
+            共 <span id="tx-count">0</span> 笔记录
+          </p>
+          <input
+            type="file"
+            id="import-file"
+            class="hidden"
+            accept="application/json,.json"
+          />
+        </div>
+      </section>
+
+      <nav class="tabbar">
+        <div class="tabbar-bg" aria-hidden="true">
+          <svg
+            viewBox="0 0 390 56"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#FFE566"
+              d="M0 20
+            C0 20 120 20 145 20
+            C165 20 175 2 195 2
+            C215 2 225 20 245 20
+            C270 20 390 20 390 20
+            L390 56 L0 56 Z"
+            />
+          </svg>
+          <div
+            style="
+              position: absolute;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              height: var(--safe-b);
+              background: #ffe566;
+            "
+          ></div>
+        </div>
+        <button type="button" class="tab active" data-screen="home">
+          <span class="ico" aria-hidden="true">
+            <svg
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="4"
+                y="6"
+                width="24"
+                height="22"
+                rx="3.5"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+                fill="#fff"
+              />
+              <path d="M4 11.5h24" stroke="#2b2b2b" stroke-width="2.2" />
+              <path
+                d="M10 4v5M22 4v5"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              />
+              <circle cx="10.5" cy="17" r="1.6" fill="#f37289" />
+              <circle cx="16" cy="17" r="1.6" fill="#2b2b2b" />
+              <circle cx="21.5" cy="17" r="1.6" fill="#2b2b2b" />
+              <circle cx="10.5" cy="22.5" r="1.6" fill="#2b2b2b" />
+              <circle cx="16" cy="22.5" r="1.6" fill="#ffe566" />
+            </svg>
+          </span>
+          主页
+        </button>
+        <button type="button" class="tab" data-screen="list">
+          <span class="ico" aria-hidden="true">
+            <svg
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 6.5h12.5a2.2 2.2 0 0 1 2.2 2.2V26a1.6 1.6 0 0 1-1.6 1.6H9A2.2 2.2 0 0 1 6.8 25.4V8.7A2.2 2.2 0 0 1 8 6.5z"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+                fill="#fff8dc"
+              />
+              <path
+                d="M11.5 5h13a2.2 2.2 0 0 1 2.2 2.2V24"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+                fill="#fff"
+              />
+              <path
+                d="M11.5 13.5h9M11.5 18h8M11.5 22.5h6"
+                stroke="#2b2b2b"
+                stroke-width="2.1"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          明细
+        </button>
+        <div class="fab-slot">
+          <button type="button" class="fab" id="fab-add" aria-label="记一笔">
+            +
+          </button>
+        </div>
+        <button type="button" class="tab" data-screen="stats">
+          <span class="ico" aria-hidden="true">
+            <svg
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="5.5"
+                y="4"
+                width="21"
+                height="25"
+                rx="3.5"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+                fill="#fff"
+              />
+              <path d="M5.5 10h21" stroke="#2b2b2b" stroke-width="2.2" />
+              <rect
+                x="5.5"
+                y="4"
+                width="21"
+                height="6"
+                rx="2.5"
+                fill="#ffe566"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+              />
+              <path
+                d="M10 15.5h12M10 20h10M10 24.5h8"
+                stroke="#2b2b2b"
+                stroke-width="2.1"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          统计
+        </button>
+        <button type="button" class="tab" data-screen="me">
+          <span class="ico" aria-hidden="true">
+            <svg
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16"
+                cy="18.5"
+                r="10"
+                fill="#ffe8a8"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+              />
+              <path
+                d="M7.5 12l3-6 4 5M24.5 12l-3-6-4 5"
+                fill="#ffc4a8"
+                stroke="#2b2b2b"
+                stroke-width="2.2"
+                stroke-linejoin="round"
+              />
+              <circle cx="12.2" cy="17.8" r="1.5" fill="#2b2b2b" />
+              <circle cx="19.8" cy="17.8" r="1.5" fill="#2b2b2b" />
+              <path
+                d="M13.6 22c1.3 1.4 3.5 1.4 4.8 0"
+                stroke="#2b2b2b"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M14.8 19.8h2.4"
+                stroke="#f37289"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          我的
+        </button>
+      </nav>
+
+      <!-- 记账弹层 -->
+      <div class="overlay" id="overlay-form">
+        <div class="sheet">
+          <div class="sheet-head">
+            <button type="button" id="form-cancel">取消</button>
+            <h3 id="form-title">记一笔</h3>
+            <button type="button" class="save" id="form-save">保存</button>
+          </div>
+          <div class="sheet-body">
+            <div class="type-seg">
+              <button type="button" class="on expense" data-type="expense">
+                支出
+              </button>
+              <button type="button" data-type="income">收入</button>
+            </div>
+            <div class="amount-box">
+              <label>金额</label>
+              <div class="row">
+                <span class="yen">¥</span
+                ><input
+                  type="number"
+                  id="f-amount"
+                  inputmode="decimal"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                />
               </div>
             </div>
-          </div>
-        </header>
-        <div class="section-pad" id="tx-list"></div>
-      </div>
-    </section>
-
-    <!-- 统计 -->
-    <section class="screen" id="screen-stats">
-      <div class="scroll">
-        <div class="page-head">
-          <h1 class="page-title">统计</h1>
-          <div class="seg" id="stats-type">
-            <button type="button" class="on" data-type="expense">支出</button>
-            <button type="button" data-type="income">收入</button>
-          </div>
-        </div>
-        <div class="section-pad" style="padding-top:0; margin-bottom:8px;">
-          <div class="month-switch" style="display:inline-flex; background:#e8eeec; color:var(--ink);">
-            <button type="button" id="stats-prev" style="color:var(--ink);">‹</button>
-            <span id="stats-month-label">2026年7月</span>
-            <button type="button" id="stats-next" style="color:var(--ink);">›</button>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-total">
-            <div class="label" id="stats-label">本月支出</div>
-            <div class="val" id="stats-total">¥0.00</div>
-          </div>
-          <div class="chart-wrap"><canvas id="pie" width="200" height="200"></canvas></div>
-          <div class="legend" id="legend"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 我的 -->
-    <section class="screen" id="screen-me">
-      <div class="scroll">
-        <div class="me-hero">
-          <h1>轻记</h1>
-          <p>数据保存在本机，不上传云端</p>
-        </div>
-        <div class="menu">
-          <button type="button" class="menu-item" id="btn-export">
-            <div class="menu-ico">📤</div>
-            <div>
-              <div>导出账单</div>
-              <div class="menu-desc">导出为 JSON 文件，方便备份</div>
+            <div class="cat-grid" id="cat-grid"></div>
+            <div class="field">
+              <label>日期</label>
+              <button type="button" class="date-trigger" id="f-date-btn">
+                <span id="f-date-label">2026年07月28日</span>
+                <svg
+                  class="cal-ico"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="3.5"
+                    y="5"
+                    width="17"
+                    height="15"
+                    rx="2.5"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <path
+                    d="M3.5 9.5h17"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <path
+                    d="M8 3.5v3M16 3.5v3"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+              <input type="hidden" id="f-date" value="" />
             </div>
-            <span class="arrow">›</span>
-          </button>
-          <button type="button" class="menu-item" id="btn-import">
-            <div class="menu-ico">📥</div>
-            <div>
-              <div>导入账单</div>
-              <div class="menu-desc">从 JSON 文件恢复数据</div>
+            <div class="field">
+              <label>备注</label
+              ><input
+                type="text"
+                id="f-note"
+                maxlength="60"
+                placeholder="写点什么喵～"
+              />
             </div>
-            <span class="arrow">›</span>
-          </button>
-        </div>
-        <div class="menu">
-          <button type="button" class="menu-item" id="btn-export-csv">
-            <div class="menu-ico">📊</div>
-            <div>
-              <div>导出 CSV</div>
-              <div class="menu-desc">可用 Excel / Numbers 打开</div>
-            </div>
-            <span class="arrow">›</span>
-          </button>
-        </div>
-        <div class="menu">
-          <button type="button" class="menu-item danger" id="btn-clear">
-            <div class="menu-ico">🗑</div>
-            <div>
-              <div>清空全部数据</div>
-              <div class="menu-desc">不可恢复，请先导出备份</div>
-            </div>
-            <span class="arrow">›</span>
-          </button>
-        </div>
-        <p class="hint">共 <span id="tx-count">0</span> 笔记录 · 数据存储于浏览器 localStorage。发到 GitHub Pages 后可直接使用。</p>
-        <input type="file" id="import-file" class="hidden-file" accept="application/json,.json" />
-      </div>
-    </section>
-
-    <!-- Tab bar -->
-    <nav class="tabbar">
-      <button type="button" class="tab active" data-screen="home"><span class="ico">📋</span>明细</button>
-      <button type="button" class="tab" data-screen="stats"><span class="ico">📊</span>统计</button>
-      <span aria-hidden="true"></span>
-      <button type="button" class="tab" data-screen="me"><span class="ico">👤</span>我的</button>
-      <button type="button" class="fab" id="fab-add" aria-label="记一笔">+</button>
-    </nav>
-
-    <!-- Import choice -->
-    <div class="overlay" id="overlay-import">
-      <div class="sheet" style="max-height:50%">
-        <div class="sheet-head">
-          <button type="button" class="sheet-close" id="import-cancel">取消</button>
-          <h2>导入账单</h2>
-          <span style="width:40px"></span>
-        </div>
-        <div class="sheet-body">
-          <p class="hint" style="margin:0 0 14px; font-size:14px; color:var(--ink-soft)" id="import-info">检测到账单</p>
-          <button type="button" class="btn-primary" id="import-merge">合并到现有数据</button>
-          <button type="button" class="btn-danger" id="import-replace">覆盖全部数据</button>
+            <button type="button" class="btn-main" id="form-submit">
+              保存
+            </button>
+            <button type="button" class="btn-danger hidden" id="form-delete">
+              删除这笔
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- 导入方式 -->
+      <div class="overlay" id="overlay-import">
+        <div class="sheet" style="max-height: 46%">
+          <div class="sheet-head">
+            <button type="button" id="import-cancel">取消</button>
+            <h3>导入账单</h3>
+            <span style="width: 40px"></span>
+          </div>
+          <div class="sheet-body">
+            <p class="hint" id="import-info" style="margin-bottom: 12px">
+              检测到账单
+            </p>
+            <button type="button" class="btn-main" id="import-merge">
+              合并到现有数据
+            </button>
+            <button type="button" class="btn-danger" id="import-replace">
+              覆盖全部数据
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 年份选择（统计） -->
+      <div class="overlay" id="overlay-year">
+        <div class="sheet" style="max-height: 58%">
+          <div class="sheet-body" style="padding-top: 12px">
+            <div class="year-picker-head">
+              <button
+                type="button"
+                class="flip-btn"
+                id="decade-prev"
+                aria-label="上一组"
+              >
+                <img src="assets/nav-prev.svg" alt="" />
+              </button>
+              <span class="title">年份</span>
+              <button
+                type="button"
+                class="flip-btn"
+                id="decade-next"
+                aria-label="下一组"
+              >
+                <img src="assets/nav-next.svg" alt="" />
+              </button>
+            </div>
+            <button
+              type="button"
+              class="stats-all-btn"
+              id="stats-all-btn"
+              data-year="all"
+            >
+              统计所有
+            </button>
+            <div class="year-grid" id="year-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 明细周期选择 -->
+      <div class="overlay" id="overlay-period">
+        <div class="sheet">
+          <div class="sheet-body" style="padding-top: 8px">
+            <div class="period-tabs" id="period-tabs">
+              <button type="button" class="on" data-mode="month">
+                按月查看
+              </button>
+              <button type="button" data-mode="year">按年查看</button>
+            </div>
+            <div class="period-nav">
+              <button
+                type="button"
+                class="flip-btn"
+                id="period-prev"
+                aria-label="上一页"
+              >
+                <img src="assets/nav-prev.svg" alt="" />
+              </button>
+              <span id="period-nav-label">2026年 07月</span>
+              <button
+                type="button"
+                class="flip-btn"
+                id="period-next"
+                aria-label="下一页"
+              >
+                <img src="assets/nav-next.svg" alt="" />
+              </button>
+            </div>
+            <div id="period-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手绘风日期选择 -->
+      <div class="overlay" id="overlay-datepicker">
+        <div class="dp-sheet">
+          <svg
+            class="dp-cat"
+            viewBox="0 0 64 56"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle
+              cx="32"
+              cy="34"
+              r="16"
+              fill="#ffe8a8"
+              stroke="#2b2b2b"
+              stroke-width="2.2"
+            />
+            <path
+              d="M17 24l5-10 7 8M47 24l-5-10-7 8"
+              fill="#ffc4a8"
+              stroke="#2b2b2b"
+              stroke-width="2.1"
+              stroke-linejoin="round"
+            />
+            <circle cx="25.5" cy="33" r="2" fill="#2b2b2b" />
+            <circle cx="38.5" cy="33" r="2" fill="#2b2b2b" />
+            <path
+              d="M28.5 39c2 2.2 5 2.2 7 0"
+              stroke="#2b2b2b"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <path
+              d="M30.5 36.2h3"
+              stroke="#f37289"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+            <ellipse
+              cx="22"
+              cy="38"
+              rx="3.2"
+              ry="2"
+              fill="#f9b4c0"
+              opacity="0.75"
+            />
+            <ellipse
+              cx="42"
+              cy="38"
+              rx="3.2"
+              ry="2"
+              fill="#f9b4c0"
+              opacity="0.75"
+            />
+          </svg>
+          <div class="dp-nav">
+            <button
+              type="button"
+              class="flip-btn"
+              id="dp-prev"
+              aria-label="上个月"
+            >
+              <img src="assets/nav-prev.svg" alt="" />
+            </button>
+            <div class="dp-title" id="dp-title">
+              <span class="yr">2026年</span> <span class="mo">7月</span>
+            </div>
+            <button
+              type="button"
+              class="flip-btn"
+              id="dp-next"
+              aria-label="下个月"
+            >
+              <img src="assets/nav-next.svg" alt="" />
+            </button>
+          </div>
+          <div class="dp-week">
+            <span>一</span><span>二</span><span>三</span><span>四</span
+            ><span>五</span><span class="wknd">六</span
+            ><span class="wknd">日</span>
+          </div>
+          <div class="dp-grid" id="dp-grid"></div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
     </div>
 
-    <!-- Add / Edit sheet -->
-    <div class="overlay" id="overlay-form">
-      <div class="sheet">
-        <div class="sheet-head">
-          <button type="button" class="sheet-close" id="form-cancel">取消</button>
-          <h2 id="form-title">记一笔</h2>
-          <button type="button" class="sheet-action" id="form-save">保存</button>
-        </div>
-        <div class="sheet-body">
-          <div class="type-tabs">
-            <button type="button" class="on expense" data-type="expense">支出</button>
-            <button type="button" data-type="income">收入</button>
-          </div>
-          <div class="amount-box">
-            <label>金额</label>
-            <div class="amount-row">
-              <span class="yen">¥</span>
-              <input type="number" id="f-amount" inputmode="decimal" placeholder="0.00" step="0.01" min="0" />
-            </div>
-          </div>
-          <div class="cat-grid" id="cat-grid"></div>
-          <div class="field">
-            <label>日期</label>
-            <input type="date" id="f-date" />
-          </div>
-          <div class="field">
-            <label>备注</label>
-            <input type="text" id="f-note" maxlength="60" placeholder="写点什么…" />
-          </div>
-          <button type="button" class="btn-primary" id="form-submit">保存</button>
-          <button type="button" class="btn-danger" id="form-delete" style="display:none">删除这笔</button>
-        </div>
-      </div>
-    </div>
+    <script>
+      const STORAGE_KEY = "qingji_ledger_v3";
+      const WEEK = "日一二三四五六";
 
-    <div class="toast" id="toast"></div>
-  </div>
+      const CATEGORIES = {
+        expense: [
+          { id: "food", name: "餐饮", icon: "🍜" },
+          { id: "transport", name: "交通", icon: "🚌" },
+          { id: "shopping", name: "购物", icon: "🛍️" },
+          { id: "daily", name: "日用", icon: "🧴" },
+          { id: "fun", name: "娱乐", icon: "🎮" },
+          { id: "home", name: "居住", icon: "🏠" },
+          { id: "medical", name: "医疗", icon: "💊" },
+          { id: "edu", name: "学习", icon: "🎓" },
+          { id: "toll", name: "高速费", icon: "🎫" },
+          { id: "other_out", name: "其他", icon: "📦" },
+        ],
+        income: [
+          { id: "salary", name: "工资", icon: "💰" },
+          { id: "bonus", name: "奖金", icon: "🎉" },
+          { id: "invest", name: "理财", icon: "📈" },
+          { id: "parttime", name: "兼职", icon: "🧑‍💻" },
+          { id: "gift", name: "红包", icon: "🧧" },
+          { id: "other_in", name: "其他", icon: "✨" },
+        ],
+      };
 
-  <script>
-    const STORAGE_KEY = "qingji_ledger_v1";
+      const state = {
+        transactions: [],
+        budget: 5000,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        selectedDate: todayStr(),
+        statsYear: new Date().getFullYear(),
+        yearPageStart:
+          Math.floor((new Date().getFullYear() - 2015) / 12) * 12 + 2015,
+        listMode: "month", // month | year
+        pickerMode: "month",
+        pickerYear: new Date().getFullYear(),
+        pickerMonth: new Date().getMonth(),
+        formType: "expense",
+        formCategory: "food",
+        editingId: null,
+        dpYear: new Date().getFullYear(),
+        dpMonth: new Date().getMonth(),
+        dpSelected: todayStr(),
+      };
 
-    const CATEGORIES = {
-      expense: [
-        { id: "food", name: "餐饮", icon: "🍜", color: "#fb7185" },
-        { id: "transport", name: "交通", icon: "🚌", color: "#38bdf8" },
-        { id: "shopping", name: "购物", icon: "🛍️", color: "#a78bfa" },
-        { id: "daily", name: "日用", icon: "🧴", color: "#34d399" },
-        { id: "entertainment", name: "娱乐", icon: "🎮", color: "#f472b6" },
-        { id: "housing", name: "居住", icon: "🏠", color: "#fbbf24" },
-        { id: "medical", name: "医疗", icon: "💊", color: "#f87171" },
-        { id: "education", name: "教育", icon: "📚", color: "#60a5fa" },
-        { id: "social", name: "人情", icon: "🎁", color: "#fb923c" },
-        { id: "other_out", name: "其他", icon: "📦", color: "#94a3b8" },
-      ],
-      income: [
-        { id: "salary", name: "工资", icon: "💰", color: "#34d399" },
-        { id: "bonus", name: "奖金", icon: "🎉", color: "#fbbf24" },
-        { id: "invest", name: "理财", icon: "📈", color: "#38bdf8" },
-        { id: "parttime", name: "兼职", icon: "🧑‍💻", color: "#a78bfa" },
-        { id: "gift_in", name: "红包", icon: "🧧", color: "#f87171" },
-        { id: "other_in", name: "其他", icon: "✨", color: "#94a3b8" },
-      ],
-    };
+      let pendingImport = null;
 
-    const state = {
-      transactions: [],
-      viewYear: new Date().getFullYear(),
-      viewMonth: new Date().getMonth(), // 0-11
-      statsType: "expense",
-      editingId: null,
-      formType: "expense",
-      formCategory: "food",
-    };
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-    // ---------- utils ----------
-    const $ = (sel, root = document) => root.querySelector(sel);
-    const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+      function uid() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+      function pad(n) {
+        return String(n).padStart(2, "0");
+      }
+      function formatDateLabel(dateStr) {
+        if (!dateStr) return "选择日期";
+        const [y, m, d] = dateStr.split("-").map(Number);
+        return `${y}年${pad(m)}月${pad(d)}日`;
+      }
+      function setFormDate(dateStr) {
+        $("#f-date").value = dateStr;
+        $("#f-date-label").textContent = formatDateLabel(dateStr);
+      }
+      function todayStr() {
+        const d = new Date();
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      }
+      function money(n) {
+        const v = Number(n) || 0;
+        return "¥ " + v.toFixed(2);
+      }
+      function moneySigned(n, type) {
+        const v = Math.abs(Number(n) || 0).toLocaleString("zh-CN", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+        return (type === "expense" ? "- ¥ " : "+ ¥ ") + v;
+      }
+      function monthTitle(y, m) {
+        return `${y}年 <span class="mo-mark">${pad(m + 1)}月</span>`;
+      }
+      const CN_MONTH = [
+        "一月",
+        "二月",
+        "三月",
+        "四月",
+        "五月",
+        "六月",
+        "七月",
+        "八月",
+        "九月",
+        "十月",
+        "十一月",
+        "十二月",
+      ];
+      function getCat(type, id) {
+        return (
+          (CATEGORIES[type] || []).find((c) => c.id === id) || {
+            id,
+            name: "其他",
+            icon: "📦",
+          }
+        );
+      }
+      function toast(msg) {
+        const el = $("#toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => el.classList.remove("show"), 1800);
+      }
+      function shortAmt(n) {
+        const v = Number(n) || 0;
+        if (v >= 10000) return (v / 10000).toFixed(1) + "万";
+        if (v >= 1000) return (v / 1000).toFixed(1) + "k";
+        return v % 1 ? v.toFixed(1) : String(v);
+      }
+      function cellAmt(n, kind) {
+        const v = Number(n) || 0;
+        if (kind === "income") return v > 0 ? `+${v.toFixed(2)}` : "0.00";
+        return v > 0 ? `-${v.toFixed(2)}` : "0.00";
+      }
 
-    function uid() {
-      return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-    }
+      function load() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            // 首次 / 升级到 v3：写入 2023–2026 历史账单
+            state.transactions = seed();
+            save();
+            localStorage.removeItem("qingji_ledger_v1");
+            localStorage.removeItem("qingji_ledger_v2");
+            return;
+          }
+          const data = JSON.parse(raw);
+          state.transactions = Array.isArray(data.transactions)
+            ? data.transactions
+            : [];
+          state.budget = Number(data.budget) || 5000;
+        } catch (e) {
+          state.transactions = [];
+        }
+      }
 
-    function money(n) {
-      const v = Number(n) || 0;
-      return "¥" + v.toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
+      function save() {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            version: 2,
+            budget: state.budget,
+            transactions: state.transactions,
+          }),
+        );
+      }
 
-    function pad(n) { return String(n).padStart(2, "0"); }
+      function seed() {
+        // 2023–2026 历史账单（与 assets账单_2023-2026.json 同步）
+        return [
+          { id: "hist_20230910_1", type: "income", category: "salary", amount: 5000, date: "2023-09-10", note: "工资存入", createdAt: 1694304000000 },
+          { id: "hist_20231010_1", type: "income", category: "salary", amount: 5000, date: "2023-10-10", note: "工资存入", createdAt: 1696896000000 },
+          { id: "hist_20231110_1", type: "income", category: "salary", amount: 5000, date: "2023-11-10", note: "工资存入", createdAt: 1699574400000 },
+          { id: "hist_20231210_1", type: "income", category: "salary", amount: 5000, date: "2023-12-10", note: "工资存入", createdAt: 1702166400000 },
+          { id: "hist_20231210_2", type: "expense", category: "other_out", amount: 20000, date: "2023-12-10", note: "三金取出", createdAt: 1702166400001 },
+          { id: "hist_20240110_1", type: "income", category: "salary", amount: 10000, date: "2024-01-10", note: "工资存入", createdAt: 1704844800000 },
+          { id: "hist_20240210_1", type: "income", category: "salary", amount: 10000, date: "2024-02-10", note: "工资存入", createdAt: 1707523200000 },
+          { id: "hist_20240310_1", type: "income", category: "salary", amount: 10000, date: "2024-03-10", note: "工资存入", createdAt: 1710028800000 },
+          { id: "hist_20240410_1", type: "income", category: "salary", amount: 10000, date: "2024-04-10", note: "工资存入", createdAt: 1712707200000 },
+          { id: "hist_20240510_1", type: "income", category: "salary", amount: 10000, date: "2024-05-10", note: "工资存入", createdAt: 1715299200000 },
+          { id: "hist_20240519_1", type: "income", category: "other_in", amount: 3000, date: "2024-05-19", note: "麻将赢钱", createdAt: 1716076800000 },
+          { id: "hist_20240610_1", type: "income", category: "salary", amount: 10000, date: "2024-06-10", note: "工资存入", createdAt: 1717977600000 },
+          { id: "hist_20240620_1", type: "expense", category: "other_out", amount: 5000, date: "2024-06-20", note: "余额取出", createdAt: 1718841600000 },
+          { id: "hist_20240628_1", type: "expense", category: "other_out", amount: 5000, date: "2024-06-28", note: "余额取出", createdAt: 1719532800000 },
+          { id: "hist_20240703_1", type: "income", category: "other_in", amount: 2800, date: "2024-07-03", note: "出差报销", createdAt: 1719964800000 },
+          { id: "hist_20240710_1", type: "income", category: "salary", amount: 11000, date: "2024-07-10", note: "工资存入", createdAt: 1720569600000 },
+          { id: "hist_20240810_1", type: "income", category: "salary", amount: 10000, date: "2024-08-10", note: "工资存入", createdAt: 1723248000000 },
+          { id: "hist_20240827_1", type: "expense", category: "shopping", amount: 2000, date: "2024-08-27", note: "手机礼品", createdAt: 1724716800000 },
+          { id: "hist_20240910_1", type: "expense", category: "transport", amount: 4500, date: "2024-09-10", note: "车险取出", createdAt: 1725926400000 },
+          { id: "hist_20240910_2", type: "income", category: "salary", amount: 10500, date: "2024-09-10", note: "工资存入", createdAt: 1725926400001 },
+          { id: "hist_20240920_1", type: "expense", category: "home", amount: 8000, date: "2024-09-20", note: "租房借款", createdAt: 1726790400000 },
+          { id: "hist_20241010_1", type: "income", category: "salary", amount: 10000, date: "2024-10-10", note: "工资存入", createdAt: 1728518400000 },
+          { id: "hist_20241024_1", type: "expense", category: "transport", amount: 3800, date: "2024-10-24", note: "车险取出", createdAt: 1729728000000 },
+          { id: "hist_20241120_1", type: "expense", category: "food", amount: 200, date: "2024-11-20", note: "团购吃饭", createdAt: 1732060800000 },
+          { id: "hist_20241122_1", type: "expense", category: "transport", amount: 10000, date: "2024-11-22", note: "车子定金", createdAt: 1732233600000 },
+          { id: "hist_20241130_1", type: "expense", category: "transport", amount: 50000, date: "2024-11-30", note: "车子尾款", createdAt: 1732924800000 },
+          { id: "hist_20241130_2", type: "expense", category: "transport", amount: 4500, date: "2024-11-30", note: "车子保险", createdAt: 1732924800001 },
+          { id: "hist_20241210_1", type: "income", category: "salary", amount: 10000, date: "2024-12-10", note: "工资存入", createdAt: 1733788800000 },
+          { id: "hist_20241217_1", type: "expense", category: "food", amount: 1000, date: "2024-12-17", note: "请客吃饭", createdAt: 1734393600000 },
+          { id: "hist_20250110_1", type: "income", category: "salary", amount: 10000, date: "2025-01-10", note: "工资存入", createdAt: 1736467200000 },
+          { id: "hist_20250130_1", type: "expense", category: "other_out", amount: 16000, date: "2025-01-30", note: "过年红包", createdAt: 1738195200000 },
+          { id: "hist_20250210_1", type: "income", category: "salary", amount: 10000, date: "2025-02-10", note: "工资存入", createdAt: 1739145600000 },
+          { id: "hist_20250310_1", type: "income", category: "salary", amount: 10000, date: "2025-03-10", note: "工资存入", createdAt: 1741564800000 },
+          { id: "hist_20250410_1", type: "income", category: "salary", amount: 11000, date: "2025-04-10", note: "工资存入", createdAt: 1744243200000 },
+          { id: "hist_20250510_1", type: "income", category: "salary", amount: 4000, date: "2025-05-10", note: "工资存入", createdAt: 1746835200000 },
+          { id: "hist_20250610_1", type: "income", category: "salary", amount: 10000, date: "2025-06-10", note: "工资存入", createdAt: 1749513600000 },
+          { id: "hist_20250622_1", type: "expense", category: "home", amount: 2000, date: "2025-06-22", note: "房租取出", createdAt: 1750550400000 },
+          { id: "hist_20250710_1", type: "income", category: "salary", amount: 6000, date: "2025-07-10", note: "工资存入", createdAt: 1752105600000 },
+          { id: "hist_20250728_1", type: "income", category: "other_in", amount: 15000, date: "2025-07-28", note: "提公积金", createdAt: 1753660800000 },
+          { id: "hist_20250825_1", type: "expense", category: "medical", amount: 10000, date: "2025-08-25", note: "宝宝 picu", createdAt: 1756080000000 },
+          { id: "hist_20250910_1", type: "income", category: "salary", amount: 10000, date: "2025-09-10", note: "工资存入", createdAt: 1757462400000 },
+          { id: "hist_20251010_1", type: "income", category: "salary", amount: 3000, date: "2025-10-10", note: "工资存入", createdAt: 1760054400000 },
+          { id: "hist_20251021_1", type: "expense", category: "other_out", amount: 5000, date: "2025-10-21", note: "奶奶逝世", createdAt: 1761004800000 },
+          { id: "hist_20251029_1", type: "expense", category: "transport", amount: 3000, date: "2025-10-29", note: "电车保险", createdAt: 1761696000000 },
+          { id: "hist_20251110_1", type: "income", category: "salary", amount: 6000, date: "2025-11-10", note: "工资存入", createdAt: 1762732800000 },
+          { id: "hist_20251117_1", type: "income", category: "other_in", amount: 5000, date: "2025-11-17", note: "姨夫还款", createdAt: 1763337600000 },
+          { id: "hist_20251123_1", type: "income", category: "other_in", amount: 3000, date: "2025-11-23", note: "育儿补贴", createdAt: 1763856000000 },
+          { id: "hist_20251210_1", type: "income", category: "salary", amount: 10000, date: "2025-12-10", note: "工资存入", createdAt: 1765324800000 },
+          { id: "hist_20251212_1", type: "expense", category: "shopping", amount: 1500, date: "2025-12-12", note: "老爸手机", createdAt: 1765497600000 },
+          { id: "hist_20251222_1", type: "expense", category: "other_out", amount: 5500, date: "2025-12-22", note: "老婆红包", createdAt: 1766361600000 },
+          { id: "hist_20260110_1", type: "income", category: "salary", amount: 7000, date: "2026-01-10", note: "工资存入", createdAt: 1768003200000 },
+          { id: "hist_20260310_1", type: "income", category: "salary", amount: 6000, date: "2026-03-10", note: "工资存入", createdAt: 1773100800000 },
+          { id: "hist_20260320_1", type: "expense", category: "daily", amount: 2000, date: "2026-03-20", note: "洗碗机", createdAt: 1773964800000 },
+          { id: "hist_20260401_1", type: "expense", category: "other_out", amount: 2000, date: "2026-04-01", note: "老婆红包", createdAt: 1775001600000 },
+          { id: "hist_20260410_1", type: "income", category: "salary", amount: 8000, date: "2026-04-10", note: "工资存入", createdAt: 1775779200000 },
+          { id: "hist_20260425_1", type: "expense", category: "fun", amount: 2000, date: "2026-04-25", note: "卡丁车", createdAt: 1777075200000 },
+          { id: "hist_20260428_1", type: "expense", category: "other_out", amount: 5000, date: "2026-04-28", note: "股票投入", createdAt: 1777334400000 },
+          { id: "hist_20260506_1", type: "income", category: "other_in", amount: 1000, date: "2026-05-06", note: "公积金", createdAt: 1778025600000 },
+          { id: "hist_20260510_1", type: "income", category: "salary", amount: 12000, date: "2026-05-10", note: "工资存入", createdAt: 1778371200000 },
+          { id: "hist_20260514_1", type: "expense", category: "other_out", amount: 3000, date: "2026-05-14", note: "股票投入", createdAt: 1778716800000 },
+          { id: "hist_20260610_1", type: "income", category: "salary", amount: 6000, date: "2026-06-10", note: "工资存入", createdAt: 1781049600000 },
+          { id: "hist_20260624_1", type: "expense", category: "other_out", amount: 47000, date: "2026-06-24", note: "股票投入", createdAt: 1782259200000 },
+          { id: "hist_20260710_1", type: "income", category: "salary", amount: 9000, date: "2026-07-10", note: "工资存入", createdAt: 1783641600000 },
+          { id: "hist_20260712_1", type: "income", category: "other_in", amount: 1000, date: "2026-07-12", note: "公积金", createdAt: 1783814400000 },
+          { id: "hist_20260716_1", type: "expense", category: "other_out", amount: 10000, date: "2026-07-16", note: "股票投入", createdAt: 1784160000000 },
+        ];
+      }
 
-    function todayStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-    }
+      function monthList(y, m) {
+        const p = `${y}-${pad(m + 1)}`;
+        return state.transactions.filter((t) => t.date && t.date.startsWith(p));
+      }
+      function yearList(y) {
+        const p = `${y}-`;
+        return state.transactions.filter((t) => t.date && t.date.startsWith(p));
+      }
+      function dayList(date) {
+        return state.transactions
+          .filter((t) => t.date === date)
+          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+      function sumType(list, type) {
+        return list
+          .filter((t) => t.type === type)
+          .reduce((s, t) => s + Number(t.amount), 0);
+      }
+      function daySums(date) {
+        const list = dayList(date);
+        return {
+          income: sumType(list, "income"),
+          expense: sumType(list, "expense"),
+        };
+      }
 
-    function monthLabel(y, m) {
-      return `${y}年${m + 1}月`;
-    }
+      function setBar(el, value, max) {
+        const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
+        el.style.width = pct + "%";
+      }
 
-    function getCategory(type, id) {
-      return (CATEGORIES[type] || []).find((c) => c.id === id) || { id, name: "未知", icon: "❓", color: "#94a3b8" };
-    }
+      // ---------- render home ----------
+      function renderHome() {
+        $("#home-month").innerHTML = monthTitle(state.year, state.month);
+        const list = monthList(state.year, state.month);
+        const income = sumType(list, "income");
+        const expense = sumType(list, "expense");
+        $("#home-income").innerHTML = `<span class="sum-label">本月收入:</span> <span class="sum-val">${money(income)}</span>`;
+        $("#home-expense").innerHTML = `<span class="sum-label">本月支出:</span> <span class="sum-val">${money(expense)}</span>`;
 
-    function toast(msg) {
-      const el = $("#toast");
-      el.textContent = msg;
-      el.classList.add("show");
-      clearTimeout(toast._t);
-      toast._t = setTimeout(() => el.classList.remove("show"), 1800);
-    }
+        const first = new Date(state.year, state.month, 1);
+        const startWeek = first.getDay();
+        const daysInMonth = new Date(state.year, state.month + 1, 0).getDate();
+        const prevDays = new Date(state.year, state.month, 0).getDate();
 
-    // ---------- storage ----------
-    function load() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-          state.transactions = seedDemo();
-          save();
+        const cells = [];
+        const mk = (cls, inner, date = "") => {
+          const attrs = date
+            ? ` data-date="${date}" role="button" tabindex="0"`
+            : ` aria-hidden="true"`;
+          return `<div class="cal-cell ${cls}"${attrs}><div class="face">${inner}</div></div>`;
+        };
+
+        for (let i = 0; i < startWeek; i++) {
+          const d = prevDays - startWeek + 1 + i;
+          cells.push(mk("out", `<div class="d">${pad(d)}</div>`));
+        }
+
+        const today = todayStr();
+        for (let d = 1; d <= daysInMonth; d++) {
+          const date = `${state.year}-${pad(state.month + 1)}-${pad(d)}`;
+          const sums = daySums(date);
+          const hasAmt = !!(sums.income || sums.expense);
+          const isStart = d === 1;
+          const isToday = date === today;
+          const isOn = date === state.selectedDate;
+
+          // 优先级：选中红 > 当日粉 > 有账黄 > 无账灰；月初另加 start（月名）
+          let cls = "zero";
+          if (hasAmt) cls = "amt";
+          if (isToday) cls = "today" + (hasAmt ? " amt" : "");
+          if (isStart) cls += " start";
+          if (isOn) cls += " on";
+
+          const label = isStart
+            ? `<div class="d">${CN_MONTH[state.month]}</div>`
+            : `<div class="d">${pad(d)}</div>`;
+          // 有账或当日显示金额；纯无账灰格不显示 0.00
+          const amts =
+            hasAmt || isToday
+              ? `<div class="up">${cellAmt(sums.income, "income")}</div><div class="dn">${cellAmt(sums.expense, "expense")}</div>`
+              : "";
+
+          cells.push(mk(cls, label + amts, date));
+        }
+
+        const rest = (7 - ((startWeek + daysInMonth) % 7)) % 7;
+        for (let i = 1; i <= rest; i++) {
+          const isLast = i === rest;
+          const label = isLast
+            ? `<div class="d">${CN_MONTH[(state.month + 1) % 12]}</div>`
+            : `<div class="d">${pad(i)}</div>`;
+          cells.push(mk("out", label));
+        }
+
+        $("#cal-grid").innerHTML = cells.join("");
+
+        renderDayPanel();
+      }
+
+      function renderDayPanel() {
+        const date = state.selectedDate;
+        const [y, m, d] = date.split("-").map(Number);
+        const wd = WEEK[new Date(date + "T00:00:00").getDay()];
+        $("#day-label").textContent = `${m}.${pad(d)} 星期${wd}`;
+        const sums = daySums(date);
+        const bal = sums.income - sums.expense;
+        $("#day-balance").textContent =
+          `结余: ${bal < 0 ? "- " : ""}${money(Math.abs(bal))}`;
+
+        const items = dayList(date);
+        const box = $("#day-list");
+        if (!items.length) {
+          box.innerHTML = `<div class="empty">这一天还没有记账，点 + 记一笔喵～</div>`;
           return;
         }
-        const data = JSON.parse(raw);
-        state.transactions = Array.isArray(data.transactions) ? data.transactions : [];
-      } catch (e) {
-        state.transactions = [];
-      }
-    }
-
-    function save() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        version: 1,
-        exportedAt: new Date().toISOString(),
-        transactions: state.transactions,
-      }));
-    }
-
-    function seedDemo() {
-      const y = new Date().getFullYear();
-      const m = pad(new Date().getMonth() + 1);
-      const d = pad(new Date().getDate());
-      return [
-        { id: uid(), type: "expense", category: "food", amount: 32.5, date: `${y}-${m}-${d}`, note: "午饭", createdAt: Date.now() },
-        { id: uid(), type: "expense", category: "transport", amount: 6, date: `${y}-${m}-${d}`, note: "地铁", createdAt: Date.now() - 1 },
-        { id: uid(), type: "income", category: "salary", amount: 12000, date: `${y}-${m}-01`, note: "月薪", createdAt: Date.now() - 2 },
-      ];
-    }
-
-    // ---------- queries ----------
-    function monthTx(y, m) {
-      const prefix = `${y}-${pad(m + 1)}`;
-      return state.transactions
-        .filter((t) => t.date && t.date.startsWith(prefix))
-        .sort((a, b) => (b.date + b.createdAt).localeCompare(a.date + a.createdAt));
-    }
-
-    function sumByType(list, type) {
-      return list.filter((t) => t.type === type).reduce((s, t) => s + Number(t.amount), 0);
-    }
-
-    // ---------- render home ----------
-    function renderHome() {
-      $("#month-label").textContent = monthLabel(state.viewYear, state.viewMonth);
-      const list = monthTx(state.viewYear, state.viewMonth);
-      const income = sumByType(list, "income");
-      const expense = sumByType(list, "expense");
-      $("#balance").textContent = money(income - expense);
-      $("#income-sum").textContent = money(income);
-      $("#expense-sum").textContent = money(expense);
-
-      const wrap = $("#tx-list");
-      if (!list.length) {
-        wrap.innerHTML = `<div class="empty"><div class="emoji">🍃</div><p>本月还没有记录<br>点中间 + 记一笔吧</p></div>`;
-        return;
+        box.innerHTML = items
+          .map((t) => {
+            const cat = getCat(t.type, t.category);
+            return `<button type="button" class="tx-row" data-id="${t.id}">
+          <span class="tx-ico">${cat.icon}</span>
+          <span class="tx-name">${t.note || cat.name}</span>
+          <span class="tx-amt">${moneySigned(t.amount, t.type)}</span>
+        </button>`;
+          })
+          .join("");
       }
 
-      const groups = {};
-      list.forEach((t) => {
-        (groups[t.date] ||= []).push(t);
-      });
-
-      const days = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-      wrap.innerHTML = days.map((date) => {
-        const items = groups[date];
-        const dayExpense = sumByType(items, "expense");
-        const dayIncome = sumByType(items, "income");
-        let sumText = "";
-        if (dayExpense) sumText += `支 ${money(dayExpense)}`;
-        if (dayIncome) sumText += (sumText ? "  " : "") + `收 ${money(dayIncome)}`;
-        const [yy, mm, dd] = date.split("-");
-        const weekday = "日一二三四五六"[new Date(date + "T00:00:00").getDay()];
-
-        return `
-          <div class="day-group">
-            <div class="day-head">
-              <span>${Number(mm)}月${Number(dd)}日 周${weekday}</span>
-              <span class="sum">${sumText}</span>
-            </div>
-            <div class="card-list">
-              ${items.map((t) => {
-                const cat = getCategory(t.type, t.category);
-                const sign = t.type === "expense" ? "-" : "+";
-                return `
-                  <div class="tx-item" data-id="${t.id}">
-                    <div class="tx-icon" style="background:${cat.color}22">${cat.icon}</div>
-                    <div class="tx-main">
-                      <div class="tx-title">${cat.name}</div>
-                      <div class="tx-sub">${t.note || "无备注"}</div>
-                    </div>
-                    <div class="tx-amount ${t.type}">${sign}${money(t.amount).slice(1)}</div>
-                  </div>`;
-              }).join("")}
-            </div>
-          </div>`;
-      }).join("");
-    }
-
-    // ---------- render stats ----------
-    function renderStats() {
-      $("#stats-month-label").textContent = monthLabel(state.viewYear, state.viewMonth);
-      const list = monthTx(state.viewYear, state.viewMonth).filter((t) => t.type === state.statsType);
-      const total = list.reduce((s, t) => s + Number(t.amount), 0);
-      $("#stats-label").textContent = state.statsType === "expense" ? "本月支出" : "本月收入";
-      $("#stats-total").textContent = money(total);
-      $("#stats-total").style.color = state.statsType === "expense" ? "var(--expense)" : "var(--income)";
-
-      const map = {};
-      list.forEach((t) => {
-        map[t.category] = (map[t.category] || 0) + Number(t.amount);
-      });
-      const rows = Object.entries(map)
-        .map(([id, amount]) => ({ ...getCategory(state.statsType, id), amount }))
-        .sort((a, b) => b.amount - a.amount);
-
-      drawPie(rows, total);
-      const legend = $("#legend");
-      if (!rows.length) {
-        legend.innerHTML = `<div class="empty" style="padding:24px"><p>暂无数据</p></div>`;
-        return;
-      }
-      legend.innerHTML = rows.map((r) => {
-        const pct = total ? Math.round((r.amount / total) * 100) : 0;
-        return `
-          <div class="legend-row">
-            <span class="dot" style="background:${r.color}"></span>
-            <span class="legend-name">${r.icon} ${r.name}</span>
-            <span class="legend-pct">${pct}%</span>
-            <span class="legend-amt">${money(r.amount)}</span>
-          </div>`;
-      }).join("");
-    }
-
-    function drawPie(rows, total) {
-      const canvas = $("#pie");
-      const ctx = canvas.getContext("2d");
-      const dpr = window.devicePixelRatio || 1;
-      const size = 200;
-      canvas.width = size * dpr;
-      canvas.height = size * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, size, size);
-
-      const cx = 100, cy = 100, r = 78, ir = 48;
-
-      if (!rows.length || !total) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.fillStyle = "#e5ebe9";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(cx, cy, ir, 0, Math.PI * 2);
-        ctx.fillStyle = "#fff";
-        ctx.fill();
-        return;
-      }
-
-      let start = -Math.PI / 2;
-      rows.forEach((row) => {
-        const angle = (row.amount / total) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, r, start, start + angle);
-        ctx.closePath();
-        ctx.fillStyle = row.color;
-        ctx.fill();
-        start += angle;
-      });
-      ctx.beginPath();
-      ctx.arc(cx, cy, ir, 0, Math.PI * 2);
-      ctx.fillStyle = "#fff";
-      ctx.fill();
-    }
-
-    function renderMe() {
-      $("#tx-count").textContent = state.transactions.length;
-    }
-
-    function refresh() {
-      renderHome();
-      renderStats();
-      renderMe();
-    }
-
-    // ---------- form ----------
-    function openForm(tx) {
-      state.editingId = tx ? tx.id : null;
-      state.formType = tx ? tx.type : "expense";
-      state.formCategory = tx ? tx.category : CATEGORIES.expense[0].id;
-      $("#form-title").textContent = tx ? "编辑账单" : "记一笔";
-      $("#f-amount").value = tx ? tx.amount : "";
-      $("#f-date").value = tx ? tx.date : todayStr();
-      $("#f-note").value = tx ? (tx.note || "") : "";
-      $("#form-delete").style.display = tx ? "block" : "none";
-      syncTypeTabs();
-      renderCatGrid();
-      const ov = $("#overlay-form");
-      ov.classList.add("show");
-      setTimeout(() => $("#f-amount").focus(), 200);
-    }
-
-    function closeForm() {
-      $("#overlay-form").classList.remove("show");
-      state.editingId = null;
-    }
-
-    function syncTypeTabs() {
-      $$(".type-tabs button").forEach((btn) => {
-        const on = btn.dataset.type === state.formType;
-        btn.classList.toggle("on", on);
-        btn.classList.toggle("expense", btn.dataset.type === "expense" && on);
-        btn.classList.toggle("income", btn.dataset.type === "income" && on);
-      });
-    }
-
-    function renderCatGrid() {
-      const cats = CATEGORIES[state.formType];
-      if (!cats.find((c) => c.id === state.formCategory)) {
-        state.formCategory = cats[0].id;
-      }
-      $("#cat-grid").innerHTML = cats.map((c) => `
-        <button type="button" class="cat-btn ${c.id === state.formCategory ? "on" : ""}" data-id="${c.id}">
-          <div class="ci" style="background:${c.color}22">${c.icon}</div>
-          <span>${c.name}</span>
-        </button>
-      `).join("");
-    }
-
-    function submitForm() {
-      const amount = Number($("#f-amount").value);
-      const date = $("#f-date").value;
-      const note = $("#f-note").value.trim();
-      if (!amount || amount <= 0) { toast("请输入金额"); return; }
-      if (!date) { toast("请选择日期"); return; }
-
-      if (state.editingId) {
-        const i = state.transactions.findIndex((t) => t.id === state.editingId);
-        if (i >= 0) {
-          state.transactions[i] = {
-            ...state.transactions[i],
-            type: state.formType,
-            category: state.formCategory,
-            amount: Math.round(amount * 100) / 100,
-            date,
-            note,
-          };
+      function listRangeData() {
+        if (state.listMode === "year") {
+          const list = yearList(state.year)
+            .slice()
+            .sort((a, b) =>
+              (b.date + String(b.createdAt)).localeCompare(
+                a.date + String(a.createdAt),
+              ),
+            );
+          return { list, word: "本年", title: `${state.year}年的账目明细` };
         }
-        toast("已更新");
-      } else {
-        state.transactions.push({
-          id: uid(),
+        const list = monthList(state.year, state.month)
+          .slice()
+          .sort((a, b) =>
+            (b.date + String(b.createdAt)).localeCompare(
+              a.date + String(a.createdAt),
+            ),
+          );
+        return {
+          list,
+          word: "本月",
+          title: `${state.year}年${pad(state.month + 1)}月的账目明细`,
+        };
+      }
+
+      // ---------- render list ----------
+      function renderList() {
+        if (state.listMode === "week") state.listMode = "month";
+        const { list, word, title } = listRangeData();
+        $("#list-period-label").textContent = title;
+        $("#list-bal-label").textContent = `${word}结余`;
+        $("#list-exp-label").textContent = `${word}支出`;
+        $("#list-inc-label").textContent = `${word}收入`;
+
+        const income = sumType(list, "income");
+        const expense = sumType(list, "expense");
+        $("#list-balance").textContent = money(income - expense);
+        $("#list-exp").textContent = money(expense);
+        $("#list-inc").textContent = money(income);
+        const max = Math.max(income, expense, 1);
+        setBar($("#list-exp-bar"), expense, max);
+        setBar($("#list-inc-bar"), income, max);
+
+        const wrap = $("#list-tx");
+        if (!list.length) {
+          wrap.innerHTML = `<div class="empty">这段时间还没有记录</div>`;
+          return;
+        }
+        const groups = {};
+        list.forEach((t) => {
+          (groups[t.date] ||= []).push(t);
+        });
+        const days = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+        wrap.innerHTML = days
+          .map((date) => {
+            const items = groups[date];
+            const inc = sumType(items, "income");
+            const exp = sumType(items, "expense");
+            const bal = inc - exp;
+            const [, m, d] = date.split("-").map(Number);
+            const wd = WEEK[new Date(date + "T00:00:00").getDay()];
+            return `<div class="group">
+          <div class="group-head">
+            <span>${m}.${pad(d)} 星期${wd}</span>
+            <span>结余: ${bal < 0 ? "- " : ""}${money(Math.abs(bal))}</span>
+          </div>
+          ${items
+            .map((t) => {
+              const cat = getCat(t.type, t.category);
+              return `<button type="button" class="tx-row" data-id="${t.id}">
+              <span class="tx-ico">${cat.icon}</span>
+              <span class="tx-name">${t.note || cat.name}</span>
+              <span class="tx-amt">${moneySigned(t.amount, t.type)}</span>
+            </button>`;
+            })
+            .join("")}
+        </div>`;
+          })
+          .join("");
+      }
+
+      // ---------- render stats ----------
+      function statsIsAll() {
+        return state.statsYear === "all";
+      }
+      function allYearsWithData() {
+        const years = new Set();
+        state.transactions.forEach((t) => {
+          if (t.date) years.add(Number(String(t.date).slice(0, 4)));
+        });
+        return [...years].filter((y) => y > 1900).sort((a, b) => b - a);
+      }
+      function renderStats() {
+        const all = statsIsAll();
+        $("#stats-year").textContent = all
+          ? "全部账单"
+          : `${state.statsYear}年的账单`;
+        $("#stats-bal-label").textContent = all ? "总结余" : "本年结余";
+        $("#stats-exp-label").textContent = all ? "总支出" : "本年支出";
+        $("#stats-inc-label").textContent = all ? "总收入" : "本年收入";
+        $("#stats-list-title").textContent = all ? "年份列表" : "账单列表";
+        $("#stats-col-label").textContent = all ? "年份" : "月份";
+
+        const list = all ? state.transactions : yearList(state.statsYear);
+        const income = sumType(list, "income");
+        const expense = sumType(list, "expense");
+        $("#year-balance").textContent = money(income - expense);
+        $("#year-exp").textContent = money(expense);
+        $("#year-inc").textContent = money(income);
+        const max = Math.max(income, expense, 1);
+        setBar($("#year-exp-bar"), expense, max);
+        setBar($("#year-inc-bar"), income, max);
+
+        if (all) {
+          const years = allYearsWithData();
+          const rows = years.map((y) => {
+            const yl = yearList(y);
+            const inc = sumType(yl, "income");
+            const exp = sumType(yl, "expense");
+            const bal = inc - exp;
+            return `<button type="button" class="table-row" data-year="${y}">
+          <span>${y}年</span>
+          <span>-${exp.toFixed(2)}</span>
+          <span>+${inc.toFixed(2)}</span>
+          <span>${bal >= 0 ? "+" : ""}${bal.toFixed(2)}</span>
+          <span class="chev">›</span>
+        </button>`;
+          });
+          $("#month-table").innerHTML = rows.length
+            ? rows.join("")
+            : `<div class="empty">还没有任何账单</div>`;
+          return;
+        }
+
+        const now = new Date();
+        const rows = [];
+        for (let m = 11; m >= 0; m--) {
+          const ml = monthList(state.statsYear, m);
+          if (
+            !ml.length &&
+            (state.statsYear > now.getFullYear() ||
+              (state.statsYear === now.getFullYear() && m > now.getMonth()))
+          )
+            continue;
+          if (
+            !ml.length &&
+            state.statsYear === now.getFullYear() &&
+            m > now.getMonth()
+          )
+            continue;
+          const inc = sumType(ml, "income");
+          const exp = sumType(ml, "expense");
+          const bal = inc - exp;
+          if (!ml.length && state.statsYear < now.getFullYear()) continue;
+          if (!ml.length) continue;
+          rows.push(`<button type="button" class="table-row" data-month="${m}">
+          <span>${m + 1}月</span>
+          <span>-${exp.toFixed(2)}</span>
+          <span>+${inc.toFixed(2)}</span>
+          <span>${bal >= 0 ? "+" : ""}${bal.toFixed(2)}</span>
+          <span class="chev">›</span>
+        </button>`);
+        }
+        $("#month-table").innerHTML = rows.length
+          ? rows.join("")
+          : `<div class="empty">这一年还没有账单</div>`;
+      }
+
+      function renderMe() {
+        $("#tx-count").textContent = state.transactions.length;
+      }
+
+      function refresh() {
+        renderHome();
+        renderList();
+        renderStats();
+        renderMe();
+      }
+
+      function switchScreen(name) {
+        $$(".screen").forEach((s) => s.classList.remove("active"));
+        $(`#screen-${name}`).classList.add("active");
+        $$(".tabbar .tab").forEach((t) =>
+          t.classList.toggle("active", t.dataset.screen === name),
+        );
+      }
+
+      // ---------- form ----------
+      function openForm(tx) {
+        state.editingId = tx ? tx.id : null;
+        state.formType = tx ? tx.type : "expense";
+        state.formCategory = tx ? tx.category : CATEGORIES.expense[0].id;
+        $("#form-title").textContent = tx ? "编辑账单" : "记一笔";
+        $("#f-amount").value = tx ? tx.amount : "";
+        setFormDate(tx ? tx.date : state.selectedDate);
+        $("#f-note").value = tx ? tx.note || "" : "";
+        $("#form-delete").classList.toggle("hidden", !tx);
+        syncType();
+        renderCats();
+        $("#overlay-form").classList.add("show");
+        setTimeout(() => $("#f-amount").focus(), 150);
+      }
+      function closeForm() {
+        $("#overlay-form").classList.remove("show");
+        state.editingId = null;
+      }
+      function syncType() {
+        $$(".type-seg button").forEach((b) => {
+          const on = b.dataset.type === state.formType;
+          b.classList.toggle("on", on);
+          b.classList.toggle("expense", b.dataset.type === "expense" && on);
+          b.classList.toggle("income", b.dataset.type === "income" && on);
+        });
+      }
+      function renderCats() {
+        const cats = CATEGORIES[state.formType];
+        if (!cats.find((c) => c.id === state.formCategory))
+          state.formCategory = cats[0].id;
+        $("#cat-grid").innerHTML = cats
+          .map(
+            (c) => `
+        <button type="button" class="cat-btn ${c.id === state.formCategory ? "on" : ""}" data-id="${c.id}">
+          <span class="ci">${c.icon}</span><span>${c.name}</span>
+        </button>`,
+          )
+          .join("");
+      }
+      function submitForm() {
+        const amount = Number($("#f-amount").value);
+        const date = $("#f-date").value;
+        const note = $("#f-note").value.trim();
+        if (!amount || amount <= 0) return toast("请输入金额");
+        if (!date) return toast("请选择日期");
+        const payload = {
           type: state.formType,
           category: state.formCategory,
           amount: Math.round(amount * 100) / 100,
           date,
           note,
-          createdAt: Date.now(),
-        });
-        toast("已记账");
-      }
-      save();
-      // jump view to the recorded month
-      const [y, m] = date.split("-").map(Number);
-      state.viewYear = y;
-      state.viewMonth = m - 1;
-      closeForm();
-      refresh();
-    }
-
-    function deleteCurrent() {
-      if (!state.editingId) return;
-      if (!confirm("确定删除这笔账单？")) return;
-      state.transactions = state.transactions.filter((t) => t.id !== state.editingId);
-      save();
-      closeForm();
-      refresh();
-      toast("已删除");
-    }
-
-    // ---------- import / export ----------
-    let pendingImport = null;
-
-    function exportJSON() {
-      const payload = {
-        app: "轻记",
-        version: 1,
-        exportedAt: new Date().toISOString(),
-        transactions: state.transactions,
-      };
-      downloadBlob(
-        JSON.stringify(payload, null, 2),
-        `轻记账单_${stamp()}.json`,
-        "application/json"
-      );
-      toast("已导出 JSON");
-    }
-
-    function exportCSV() {
-      const header = ["id", "type", "category", "amount", "date", "note", "createdAt"];
-      const rows = state.transactions.map((t) =>
-        header.map((k) => {
-          let v = t[k] == null ? "" : String(t[k]);
-          if (/[",\n]/.test(v)) v = `"${v.replace(/"/g, '""')}"`;
-          return v;
-        }).join(",")
-      );
-      const csv = "\uFEFF" + [header.join(","), ...rows].join("\n");
-      downloadBlob(csv, `轻记账单_${stamp()}.csv`, "text/csv;charset=utf-8");
-      toast("已导出 CSV");
-    }
-
-    function stamp() {
-      const d = new Date();
-      return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
-    }
-
-    function downloadBlob(content, filename, type) {
-      const blob = new Blob([content], { type });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function normalizeImportList(list) {
-      return list
-        .filter((t) => t && (t.type === "expense" || t.type === "income") && t.amount != null && t.date)
-        .map((t) => ({
-          id: t.id || uid(),
-          type: t.type,
-          category: t.category || (t.type === "expense" ? "other_out" : "other_in"),
-          amount: Math.round(Number(t.amount) * 100) / 100,
-          date: String(t.date).slice(0, 10),
-          note: t.note || "",
-          createdAt: t.createdAt || Date.now(),
-        }));
-    }
-
-    function readImportFile(file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const data = JSON.parse(reader.result);
-          let list = [];
-          if (Array.isArray(data)) list = data;
-          else if (Array.isArray(data.transactions)) list = data.transactions;
-          else throw new Error("bad");
-
-          const normalized = normalizeImportList(list);
-          if (!normalized.length) { toast("文件中没有有效账单"); return; }
-
-          pendingImport = normalized;
-          $("#import-info").textContent = `检测到 ${normalized.length} 笔账单，请选择导入方式：`;
-          $("#overlay-import").classList.add("show");
-        } catch (e) {
-          toast("导入失败：文件格式错误");
+        };
+        if (state.editingId) {
+          const i = state.transactions.findIndex(
+            (t) => t.id === state.editingId,
+          );
+          if (i >= 0)
+            state.transactions[i] = { ...state.transactions[i], ...payload };
+          toast("已更新");
+        } else {
+          state.transactions.push({
+            id: uid(),
+            ...payload,
+            createdAt: Date.now(),
+          });
+          toast("记账成功喵～");
         }
-      };
-      reader.readAsText(file, "utf-8");
-    }
-
-    function applyImport(mode) {
-      if (!pendingImport) return;
-      if (mode === "merge") {
-        const ids = new Set(state.transactions.map((t) => t.id));
-        pendingImport.forEach((t) => {
-          if (ids.has(t.id)) t.id = uid();
-          state.transactions.push(t);
-        });
-      } else {
-        state.transactions = pendingImport.slice();
+        const [y, m] = date.split("-").map(Number);
+        state.year = y;
+        state.month = m - 1;
+        state.selectedDate = date;
+        save();
+        closeForm();
+        refresh();
       }
-      pendingImport = null;
-      $("#overlay-import").classList.remove("show");
-      save();
-      refresh();
-      toast("导入成功");
-    }
-
-    // ---------- navigation ----------
-    function switchScreen(name) {
-      $$(".screen").forEach((s) => s.classList.remove("active"));
-      $(`#screen-${name}`).classList.add("active");
-      $$(".tabbar .tab").forEach((t) => {
-        t.classList.toggle("active", t.dataset.screen === name);
-      });
-    }
-
-    // ---------- events ----------
-    function bind() {
-      $$(".tabbar .tab").forEach((tab) => {
-        tab.addEventListener("click", () => switchScreen(tab.dataset.screen));
-      });
-
-      $("#fab-add").addEventListener("click", () => openForm(null));
-      $("#form-cancel").addEventListener("click", closeForm);
-      $("#form-save").addEventListener("click", submitForm);
-      $("#form-submit").addEventListener("click", submitForm);
-      $("#form-delete").addEventListener("click", deleteCurrent);
-
-      $("#overlay-form").addEventListener("click", (e) => {
-        if (e.target === $("#overlay-form")) closeForm();
-      });
-
-      $$(".type-tabs button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          state.formType = btn.dataset.type;
-          syncTypeTabs();
-          renderCatGrid();
-        });
-      });
-
-      $("#cat-grid").addEventListener("click", (e) => {
-        const btn = e.target.closest(".cat-btn");
-        if (!btn) return;
-        state.formCategory = btn.dataset.id;
-        renderCatGrid();
-      });
-
-      $("#tx-list").addEventListener("click", (e) => {
-        const item = e.target.closest(".tx-item");
-        if (!item) return;
-        const tx = state.transactions.find((t) => t.id === item.dataset.id);
-        if (tx) openForm(tx);
-      });
-
-      $("#prev-month").addEventListener("click", () => {
-        state.viewMonth--;
-        if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
+      function deleteCurrent() {
+        if (!state.editingId || !confirm("确定删除这笔账单？")) return;
+        state.transactions = state.transactions.filter(
+          (t) => t.id !== state.editingId,
+        );
+        save();
+        closeForm();
         refresh();
-      });
-      $("#next-month").addEventListener("click", () => {
-        state.viewMonth++;
-        if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
-        refresh();
-      });
-      $("#stats-prev").addEventListener("click", () => $("#prev-month").click());
-      $("#stats-next").addEventListener("click", () => $("#next-month").click());
+        toast("已删除");
+      }
 
-      $$("#stats-type button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          state.statsType = btn.dataset.type;
-          $$("#stats-type button").forEach((b) => b.classList.toggle("on", b === btn));
-          renderStats();
-        });
-      });
-
-      $("#btn-export").addEventListener("click", exportJSON);
-      $("#btn-export-csv").addEventListener("click", exportCSV);
-      $("#btn-import").addEventListener("click", () => $("#import-file").click());
-      $("#import-file").addEventListener("change", (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) readImportFile(file);
-        e.target.value = "";
-      });
-      $("#import-cancel").addEventListener("click", () => {
+      // ---------- import / export ----------
+      function stamp() {
+        const d = new Date();
+        return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+      }
+      function downloadBlob(content, filename, type) {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+      function exportJSON() {
+        downloadBlob(
+          JSON.stringify(
+            {
+              app: "assets",
+              version: 2,
+              budget: state.budget,
+              exportedAt: new Date().toISOString(),
+              transactions: state.transactions,
+            },
+            null,
+            2,
+          ),
+          `assets账单_${stamp()}.json`,
+          "application/json",
+        );
+        toast("已导出 JSON");
+      }
+      function exportCSV() {
+        const header = [
+          "id",
+          "type",
+          "category",
+          "amount",
+          "date",
+          "note",
+          "createdAt",
+        ];
+        const rows = state.transactions.map((t) =>
+          header
+            .map((k) => {
+              let v = t[k] == null ? "" : String(t[k]);
+              if (/[",\n]/.test(v)) v = `"${v.replace(/"/g, '""')}"`;
+              return v;
+            })
+            .join(","),
+        );
+        downloadBlob(
+          "\uFEFF" + [header.join(","), ...rows].join("\n"),
+          `assets账单_${stamp()}.csv`,
+          "text/csv;charset=utf-8",
+        );
+        toast("已导出 CSV");
+      }
+      function readImport(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const data = JSON.parse(reader.result);
+            let list = Array.isArray(data) ? data : data.transactions;
+            if (!Array.isArray(list)) throw new Error("bad");
+            pendingImport = list
+              .filter(
+                (t) =>
+                  t &&
+                  (t.type === "expense" || t.type === "income") &&
+                  t.amount != null &&
+                  t.date,
+              )
+              .map((t) => ({
+                id: t.id || uid(),
+                type: t.type,
+                category:
+                  t.category ||
+                  (t.type === "expense" ? "other_out" : "other_in"),
+                amount: Math.round(Number(t.amount) * 100) / 100,
+                date: String(t.date).slice(0, 10),
+                note: t.note || "",
+                createdAt: t.createdAt || Date.now(),
+              }));
+            if (!pendingImport.length) return toast("没有有效账单");
+            if (data.budget) state._importBudget = Number(data.budget);
+            $("#import-info").textContent =
+              `检测到 ${pendingImport.length} 笔账单，请选择导入方式：`;
+            $("#overlay-import").classList.add("show");
+          } catch (e) {
+            toast("导入失败：格式错误");
+          }
+        };
+        reader.readAsText(file, "utf-8");
+      }
+      function applyImport(mode) {
+        if (!pendingImport) return;
+        if (mode === "merge") {
+          const ids = new Set(state.transactions.map((t) => t.id));
+          pendingImport.forEach((t) => {
+            if (ids.has(t.id)) t.id = uid();
+            state.transactions.push(t);
+          });
+        } else {
+          state.transactions = pendingImport.slice();
+        }
+        if (state._importBudget) {
+          state.budget = state._importBudget;
+          delete state._importBudget;
+        }
         pendingImport = null;
         $("#overlay-import").classList.remove("show");
-      });
-      $("#import-merge").addEventListener("click", () => applyImport("merge"));
-      $("#import-replace").addEventListener("click", () => {
-        if (!confirm("覆盖后现有账单会全部丢失，确定继续？")) return;
-        applyImport("replace");
-      });
-
-      $("#btn-clear").addEventListener("click", () => {
-        if (!confirm("确定清空全部账单？建议先导出备份。")) return;
-        if (!confirm("再次确认：清空后无法恢复。")) return;
-        state.transactions = [];
         save();
         refresh();
-        toast("已清空");
-      });
-    }
+        toast("导入成功");
+      }
 
-    // boot
-    load();
-    bind();
-    refresh();
-  </script>
-</body>
+      function openYearPicker() {
+        const base =
+          state.statsYear === "all"
+            ? new Date().getFullYear()
+            : Number(state.statsYear);
+        state.yearPageStart = Math.floor((base - 2015) / 12) * 12 + 2015;
+        renderYearGrid();
+        $("#overlay-year").classList.add("show");
+      }
+      function closeYearPicker() {
+        $("#overlay-year").classList.remove("show");
+      }
+      function renderYearGrid() {
+        const start = state.yearPageStart;
+        $("#stats-all-btn").classList.toggle("on", state.statsYear === "all");
+        const cells = [];
+        for (let i = 0; i < 12; i++) {
+          const y = start + i;
+          const on = y === state.statsYear ? "on" : "";
+          cells.push(
+            `<button type="button" class="year-cell ${on}" data-year="${y}">${y}</button>`,
+          );
+        }
+        $("#year-grid").innerHTML = cells.join("");
+      }
+
+      function openDatePicker() {
+        const cur = $("#f-date").value || state.selectedDate || todayStr();
+        const [y, m] = cur.split("-").map(Number);
+        state.dpSelected = cur;
+        state.dpYear = y;
+        state.dpMonth = m - 1;
+        renderDatePicker();
+        $("#overlay-datepicker").classList.add("show");
+      }
+      function closeDatePicker() {
+        $("#overlay-datepicker").classList.remove("show");
+      }
+      function renderDatePicker() {
+        $("#dp-title").innerHTML =
+          `<span class="yr">${state.dpYear}年</span> <span class="mo">${state.dpMonth + 1}月</span>`;
+        const first = new Date(state.dpYear, state.dpMonth, 1);
+        // Monday-first: Sun=0 → 6, Mon=1 → 0, ...
+        const startWeek = (first.getDay() + 6) % 7;
+        const daysInMonth = new Date(
+          state.dpYear,
+          state.dpMonth + 1,
+          0,
+        ).getDate();
+        const prevDays = new Date(state.dpYear, state.dpMonth, 0).getDate();
+        const cells = [];
+        for (let i = 0; i < startWeek; i++) {
+          const d = prevDays - startWeek + 1 + i;
+          const pm = state.dpMonth === 0 ? 11 : state.dpMonth - 1;
+          const py = state.dpMonth === 0 ? state.dpYear - 1 : state.dpYear;
+          const date = `${py}-${pad(pm + 1)}-${pad(d)}`;
+          cells.push(
+            `<button type="button" class="dp-cell out" data-date="${date}">${d}</button>`,
+          );
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const date = `${state.dpYear}-${pad(state.dpMonth + 1)}-${pad(d)}`;
+          const on = date === state.dpSelected ? "on" : "";
+          cells.push(
+            `<button type="button" class="dp-cell ${on}" data-date="${date}">${d}</button>`,
+          );
+        }
+        const total = startWeek + daysInMonth;
+        const rest = (7 - (total % 7)) % 7;
+        for (let i = 1; i <= rest; i++) {
+          const nm = state.dpMonth === 11 ? 0 : state.dpMonth + 1;
+          const ny = state.dpMonth === 11 ? state.dpYear + 1 : state.dpYear;
+          const date = `${ny}-${pad(nm + 1)}-${pad(i)}`;
+          cells.push(
+            `<button type="button" class="dp-cell out" data-date="${date}">${i}</button>`,
+          );
+        }
+        $("#dp-grid").innerHTML = cells.join("");
+      }
+      function shiftDpMonth(delta) {
+        state.dpMonth += delta;
+        if (state.dpMonth < 0) {
+          state.dpMonth = 11;
+          state.dpYear--;
+        }
+        if (state.dpMonth > 11) {
+          state.dpMonth = 0;
+          state.dpYear++;
+        }
+        renderDatePicker();
+      }
+
+      function openPeriodPicker() {
+        if (state.listMode === "week") state.listMode = "month";
+        state.pickerMode = state.listMode === "year" ? "year" : "month";
+        state.pickerYear = state.year;
+        state.pickerMonth = state.month;
+        $$("#period-tabs button").forEach((b) =>
+          b.classList.toggle("on", b.dataset.mode === state.pickerMode),
+        );
+        renderPeriodPicker();
+        $("#overlay-period").classList.add("show");
+      }
+      function closePeriodPicker() {
+        $("#overlay-period").classList.remove("show");
+      }
+      function renderPeriodPicker() {
+        const mode = state.pickerMode;
+        const body = $("#period-body");
+        if (mode === "year") {
+          const start = Math.floor((state.pickerYear - 2015) / 12) * 12 + 2015;
+          state.pickerYearPage = start;
+          $("#period-nav-label").textContent = `${start} - ${start + 11}`;
+          body.innerHTML = `<div class="year-grid">${Array.from(
+            { length: 12 },
+            (_, i) => {
+              const y = start + i;
+              const on =
+                state.listMode === "year" && state.year === y ? "on" : "";
+              return `<button type="button" class="year-cell ${on}" data-pick-year="${y}">${y}</button>`;
+            },
+          ).join("")}</div>`;
+        } else {
+          state.pickerMode = "month";
+          $("#period-nav-label").innerHTML =
+            `<span class="mo-mark">${state.pickerYear}年</span>`;
+          body.innerHTML = `<div class="month-grid">${Array.from(
+            { length: 12 },
+            (_, i) => {
+              const on =
+                state.listMode === "month" &&
+                state.year === state.pickerYear &&
+                state.month === i
+                  ? "on"
+                  : "";
+              return `<button type="button" class="month-cell ${on}" data-month="${i}">${i + 1}月</button>`;
+            },
+          ).join("")}</div>`;
+        }
+      }
+
+      function shiftMonth(delta) {
+        state.month += delta;
+        if (state.month < 0) {
+          state.month = 11;
+          state.year--;
+        }
+        if (state.month > 11) {
+          state.month = 0;
+          state.year++;
+        }
+        const dim = new Date(state.year, state.month + 1, 0).getDate();
+        const day = Math.min(Number(state.selectedDate.slice(8, 10)), dim);
+        state.selectedDate = `${state.year}-${pad(state.month + 1)}-${pad(day)}`;
+        renderHome();
+        renderList();
+      }
+
+      function bind() {
+        $$(".tabbar .tab").forEach((tab) => {
+          tab.addEventListener("click", () => switchScreen(tab.dataset.screen));
+        });
+        $("#fab-add").addEventListener("click", () => openForm(null));
+
+        $("#home-prev").addEventListener("click", () => shiftMonth(-1));
+        $("#home-next").addEventListener("click", () => shiftMonth(1));
+
+        $("#list-period-btn").addEventListener("click", openPeriodPicker);
+        $$("#period-tabs button").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            state.pickerMode = btn.dataset.mode;
+            $$("#period-tabs button").forEach((b) =>
+              b.classList.toggle("on", b === btn),
+            );
+            renderPeriodPicker();
+          });
+        });
+        $("#period-prev").addEventListener("click", () => {
+          if (state.pickerMode === "year") state.pickerYear -= 12;
+          else state.pickerYear--;
+          renderPeriodPicker();
+        });
+        $("#period-next").addEventListener("click", () => {
+          if (state.pickerMode === "year") state.pickerYear += 12;
+          else state.pickerYear++;
+          renderPeriodPicker();
+        });
+        $("#period-body").addEventListener("click", (e) => {
+          const monthBtn = e.target.closest("[data-month]");
+          if (monthBtn) {
+            state.listMode = "month";
+            state.year = state.pickerYear;
+            state.month = Number(monthBtn.dataset.month);
+            state.selectedDate = `${state.year}-${pad(state.month + 1)}-01`;
+            closePeriodPicker();
+            renderHome();
+            renderList();
+            return;
+          }
+          const yearBtn = e.target.closest("[data-pick-year]");
+          if (yearBtn) {
+            state.listMode = "year";
+            state.year = Number(yearBtn.dataset.pickYear);
+            state.month = 0;
+            state.selectedDate = `${state.year}-01-01`;
+            closePeriodPicker();
+            renderHome();
+            renderList();
+          }
+        });
+        $("#overlay-period").addEventListener("click", (e) => {
+          if (e.target.id === "overlay-period") closePeriodPicker();
+        });
+
+        $("#cal-grid").addEventListener("click", (e) => {
+          const cell = e.target.closest(".cal-cell[data-date]");
+          if (!cell) return;
+          state.selectedDate = cell.dataset.date;
+          renderHome();
+        });
+
+        $("#day-list").addEventListener("click", onTxClick);
+        $("#list-tx").addEventListener("click", onTxClick);
+
+        $("#stats-year-btn").addEventListener("click", openYearPicker);
+        $("#decade-prev").addEventListener("click", () => {
+          state.yearPageStart -= 12;
+          renderYearGrid();
+        });
+        $("#decade-next").addEventListener("click", () => {
+          state.yearPageStart += 12;
+          renderYearGrid();
+        });
+        $("#stats-all-btn").addEventListener("click", () => {
+          state.statsYear = "all";
+          closeYearPicker();
+          renderStats();
+        });
+        $("#year-grid").addEventListener("click", (e) => {
+          const cell = e.target.closest(".year-cell[data-year]");
+          if (!cell) return;
+          state.statsYear = Number(cell.dataset.year);
+          closeYearPicker();
+          renderStats();
+        });
+        $("#overlay-year").addEventListener("click", (e) => {
+          if (e.target.id === "overlay-year") closeYearPicker();
+        });
+
+        $("#month-table").addEventListener("click", (e) => {
+          const yearRow = e.target.closest(".table-row[data-year]");
+          if (yearRow) {
+            state.statsYear = Number(yearRow.dataset.year);
+            renderStats();
+            return;
+          }
+          const row = e.target.closest(".table-row[data-month]");
+          if (!row || statsIsAll()) return;
+          state.listMode = "month";
+          state.year = state.statsYear;
+          state.month = Number(row.dataset.month);
+          state.selectedDate = `${state.year}-${pad(state.month + 1)}-01`;
+          switchScreen("list");
+          renderHome();
+          renderList();
+        });
+
+        $("#form-cancel").addEventListener("click", closeForm);
+        $("#form-save").addEventListener("click", submitForm);
+        $("#form-submit").addEventListener("click", submitForm);
+        $("#form-delete").addEventListener("click", deleteCurrent);
+        $("#overlay-form").addEventListener("click", (e) => {
+          if (e.target.id === "overlay-form") closeForm();
+        });
+        $("#f-date-btn").addEventListener("click", openDatePicker);
+        $("#dp-prev").addEventListener("click", () => shiftDpMonth(-1));
+        $("#dp-next").addEventListener("click", () => shiftDpMonth(1));
+        $("#dp-grid").addEventListener("click", (e) => {
+          const cell = e.target.closest(".dp-cell[data-date]");
+          if (!cell) return;
+          state.dpSelected = cell.dataset.date;
+          setFormDate(state.dpSelected);
+          closeDatePicker();
+        });
+        $("#overlay-datepicker").addEventListener("click", (e) => {
+          if (e.target.id === "overlay-datepicker") closeDatePicker();
+        });
+        $$(".type-seg button").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            state.formType = btn.dataset.type;
+            syncType();
+            renderCats();
+          });
+        });
+        $("#cat-grid").addEventListener("click", (e) => {
+          const b = e.target.closest(".cat-btn");
+          if (!b) return;
+          state.formCategory = b.dataset.id;
+          renderCats();
+        });
+
+        $("#btn-export").addEventListener("click", exportJSON);
+        $("#btn-export-csv").addEventListener("click", exportCSV);
+        $("#btn-import").addEventListener("click", () =>
+          $("#import-file").click(),
+        );
+        $("#import-file").addEventListener("change", (e) => {
+          const f = e.target.files && e.target.files[0];
+          if (f) readImport(f);
+          e.target.value = "";
+        });
+        $("#import-cancel").addEventListener("click", () => {
+          pendingImport = null;
+          $("#overlay-import").classList.remove("show");
+        });
+        $("#import-merge").addEventListener("click", () =>
+          applyImport("merge"),
+        );
+        $("#import-replace").addEventListener("click", () => {
+          if (!confirm("覆盖后现有账单会全部丢失，确定？")) return;
+          applyImport("replace");
+        });
+        $("#btn-clear").addEventListener("click", () => {
+          if (!confirm("确定清空全部账单？")) return;
+          if (!confirm("再次确认：不可恢复。")) return;
+          state.transactions = [];
+          save();
+          refresh();
+          toast("已清空");
+        });
+      }
+
+      function onTxClick(e) {
+        const row = e.target.closest(".tx-row[data-id]");
+        if (!row) return;
+        const tx = state.transactions.find((t) => t.id === row.dataset.id);
+        if (tx) openForm(tx);
+      }
+
+      load();
+      bind();
+      refresh();
+    </script>
+  </body>
 </html>

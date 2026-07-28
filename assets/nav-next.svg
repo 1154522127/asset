@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- soft shadow for chunky 3D look -->
+  <path
+    d="M16.5 9.2
+       C27.8 9.5 35.2 15.2 35.5 24
+       C35.8 32.6 28.4 38.8 16.8 39.2
+       C15.8 39.25 15.2 38.5 15.2 37.6
+       V10.8
+       C15.2 9.85 15.7 9.15 16.5 9.2Z"
+    fill="#c8c8c8"
+    transform="translate(2.4 2.6)"
+  />
+  <!-- hand-drawn D (round right / flat left toward center) -->
+  <path
+    d="M17.2 7.1
+       C28.8 7.4 36.4 13.4 36.6 23.8
+       C36.8 34.1 29.4 40.4 17.6 40.8
+       C16.45 40.85 15.7 39.95 15.7 38.85
+       V9
+       C15.7 7.9 16.3 7.05 17.2 7.1Z"
+    fill="#f2f2f2"
+    stroke="#2b2b2b"
+    stroke-width="2.7"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+  />
+</svg>
