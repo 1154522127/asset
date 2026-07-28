@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="theme-color" content="#FFF8EE" />
-    <title>assets</title>
+    <title>money</title>
     <style>
       :root {
         --bg: #fff8ee;
@@ -17,18 +17,18 @@
         --ink: #222222;
         --muted: #9a9a9a;
         --line: #ece6dc;
-        --pink: #db7c93;
+        --pink: #e67889;
         --pink-soft: #fcdfe8;
-        --pink-bar: #f37289;
+        --pink-bar: #e67889;
         --yellow: #ffd45c;
         --yellow-soft: #fef9e6;
         --yellow-cell: #fff9e6;
         --pink-today: #fde4e9;
-        --red-selected: #e3808d;
-        --month-start: #e3808d;
+        --red-selected: #e67889;
+        --month-start: #e67889;
         --gray-future: #f3f3f3;
         --cell-amt: #9a9488;
-        --today-amt: #b36d79;
+        --today-amt: #e67889;
         --sum-label: #6f6f6f;
         --expense: #c47a3a;
         --income: #3a8f5a;
@@ -275,7 +275,7 @@
       }
       .cal-cell.today:not(.on) .up,
       .cal-cell.today:not(.on) .dn {
-        color: #b36d79;
+        color: var(--today-amt);
       }
 
       /* 月初只换月名文案，底色跟 zero/amt/today/on 走 */
@@ -287,7 +287,7 @@
 
       /* 选中：红色底 + 白字（优先级最高） */
       .cal-cell.on {
-        background: #e3808d;
+        background: var(--red-selected);
         box-shadow: none;
       }
       .cal-cell.on .d {
@@ -312,7 +312,7 @@
         font-weight: 500;
       }
       .month-sum .sum-val {
-        color: #b36d79;
+        color: var(--pink);
         font-weight: 600;
       }
 
@@ -399,14 +399,15 @@
         margin-bottom: 14px;
       }
       .sum-top .label {
-        font-size: 15px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: 700;
       }
       .sum-top .val {
         font-size: 28px;
-        font-weight: 800;
+        font-weight: 700;
         color: var(--pink);
         letter-spacing: -0.02em;
+        line-height: 1.15;
       }
       .bar-row {
         display: grid;
@@ -647,7 +648,7 @@
         top: -34px;
         width: 52px;
         height: 48px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56' fill='none'%3E%3Ccircle cx='32' cy='34' r='16' fill='%23ffe8a8' stroke='%232b2b2b' stroke-width='2.2'/%3E%3Cpath d='M17 24l5-10 7 8M47 24l-5-10-7 8' fill='%23ffc4a8' stroke='%232b2b2b' stroke-width='2.1' stroke-linejoin='round'/%3E%3Ccircle cx='25.5' cy='33' r='2' fill='%232b2b2b'/%3E%3Ccircle cx='38.5' cy='33' r='2' fill='%232b2b2b'/%3E%3Cpath d='M28.5 39c2 2.2 5 2.2 7 0' stroke='%232b2b2b' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M30.5 36.2h3' stroke='%23f37289' stroke-width='1.6' stroke-linecap='round'/%3E%3Cellipse cx='22' cy='38' rx='3.2' ry='2' fill='%23f9b4c0' opacity='0.75'/%3E%3Cellipse cx='42' cy='38' rx='3.2' ry='2' fill='%23f9b4c0' opacity='0.75'/%3E%3C/svg%3E")
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56' fill='none'%3E%3Ccircle cx='32' cy='34' r='16' fill='%23ffe8a8' stroke='%232b2b2b' stroke-width='2.2'/%3E%3Cpath d='M17 24l5-10 7 8M47 24l-5-10-7 8' fill='%23ffc4a8' stroke='%232b2b2b' stroke-width='2.1' stroke-linejoin='round'/%3E%3Ccircle cx='25.5' cy='33' r='2' fill='%232b2b2b'/%3E%3Ccircle cx='38.5' cy='33' r='2' fill='%232b2b2b'/%3E%3Cpath d='M28.5 39c2 2.2 5 2.2 7 0' stroke='%232b2b2b' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M30.5 36.2h3' stroke='%23e67889' stroke-width='1.6' stroke-linecap='round'/%3E%3Cellipse cx='22' cy='38' rx='3.2' ry='2' fill='%23f9b4c0' opacity='0.75'/%3E%3Cellipse cx='42' cy='38' rx='3.2' ry='2' fill='%23f9b4c0' opacity='0.75'/%3E%3C/svg%3E")
           center / contain no-repeat;
         pointer-events: none;
         z-index: 2;
@@ -1405,7 +1406,7 @@
       <section class="screen" id="screen-me">
         <div class="scroll">
           <div class="sketch me-card">
-            <h1>assets</h1>
+            <h1>money</h1>
             <p>粉黄手绘风 · 数据只保存在本机</p>
           </div>
           <div class="sketch menu-card">
@@ -1502,7 +1503,7 @@
                 stroke-width="2.2"
                 stroke-linecap="round"
               />
-              <circle cx="10.5" cy="17" r="1.6" fill="#f37289" />
+              <circle cx="10.5" cy="17" r="1.6" fill="#e67889" />
               <circle cx="16" cy="17" r="1.6" fill="#2b2b2b" />
               <circle cx="21.5" cy="17" r="1.6" fill="#2b2b2b" />
               <circle cx="10.5" cy="22.5" r="1.6" fill="#2b2b2b" />
@@ -1615,7 +1616,7 @@
               />
               <path
                 d="M14.8 19.8h2.4"
-                stroke="#f37289"
+                stroke="#e67889"
                 stroke-width="1.8"
                 stroke-linecap="round"
               />
@@ -1835,7 +1836,7 @@
             />
             <path
               d="M30.5 36.2h3"
-              stroke="#f37289"
+              stroke="#e67889"
               stroke-width="1.6"
               stroke-linecap="round"
             />
@@ -1890,7 +1891,7 @@
     </div>
 
     <script>
-      const STORAGE_KEY = "qingji_ledger_v3";
+      const STORAGE_KEY = "qingji_ledger_v4";
       const WEEK = "日一二三四五六";
 
       const CATEGORIES = {
@@ -2021,11 +2022,10 @@
         try {
           const raw = localStorage.getItem(STORAGE_KEY);
           if (!raw) {
-            // 首次 / 升级到 v3：写入 2023–2026 历史账单
-            state.transactions = seed();
-            save();
+            state.transactions = [];
             localStorage.removeItem("qingji_ledger_v1");
             localStorage.removeItem("qingji_ledger_v2");
+            localStorage.removeItem("qingji_ledger_v3");
             return;
           }
           const data = JSON.parse(raw);
@@ -2047,77 +2047,6 @@
             transactions: state.transactions,
           }),
         );
-      }
-
-      function seed() {
-        // 2023–2026 历史账单（与 assets账单_2023-2026.json 同步）
-        return [
-          { id: "hist_20230910_1", type: "income", category: "salary", amount: 5000, date: "2023-09-10", note: "工资存入", createdAt: 1694304000000 },
-          { id: "hist_20231010_1", type: "income", category: "salary", amount: 5000, date: "2023-10-10", note: "工资存入", createdAt: 1696896000000 },
-          { id: "hist_20231110_1", type: "income", category: "salary", amount: 5000, date: "2023-11-10", note: "工资存入", createdAt: 1699574400000 },
-          { id: "hist_20231210_1", type: "income", category: "salary", amount: 5000, date: "2023-12-10", note: "工资存入", createdAt: 1702166400000 },
-          { id: "hist_20231210_2", type: "expense", category: "other_out", amount: 20000, date: "2023-12-10", note: "三金取出", createdAt: 1702166400001 },
-          { id: "hist_20240110_1", type: "income", category: "salary", amount: 10000, date: "2024-01-10", note: "工资存入", createdAt: 1704844800000 },
-          { id: "hist_20240210_1", type: "income", category: "salary", amount: 10000, date: "2024-02-10", note: "工资存入", createdAt: 1707523200000 },
-          { id: "hist_20240310_1", type: "income", category: "salary", amount: 10000, date: "2024-03-10", note: "工资存入", createdAt: 1710028800000 },
-          { id: "hist_20240410_1", type: "income", category: "salary", amount: 10000, date: "2024-04-10", note: "工资存入", createdAt: 1712707200000 },
-          { id: "hist_20240510_1", type: "income", category: "salary", amount: 10000, date: "2024-05-10", note: "工资存入", createdAt: 1715299200000 },
-          { id: "hist_20240519_1", type: "income", category: "other_in", amount: 3000, date: "2024-05-19", note: "麻将赢钱", createdAt: 1716076800000 },
-          { id: "hist_20240610_1", type: "income", category: "salary", amount: 10000, date: "2024-06-10", note: "工资存入", createdAt: 1717977600000 },
-          { id: "hist_20240620_1", type: "expense", category: "other_out", amount: 5000, date: "2024-06-20", note: "余额取出", createdAt: 1718841600000 },
-          { id: "hist_20240628_1", type: "expense", category: "other_out", amount: 5000, date: "2024-06-28", note: "余额取出", createdAt: 1719532800000 },
-          { id: "hist_20240703_1", type: "income", category: "other_in", amount: 2800, date: "2024-07-03", note: "出差报销", createdAt: 1719964800000 },
-          { id: "hist_20240710_1", type: "income", category: "salary", amount: 11000, date: "2024-07-10", note: "工资存入", createdAt: 1720569600000 },
-          { id: "hist_20240810_1", type: "income", category: "salary", amount: 10000, date: "2024-08-10", note: "工资存入", createdAt: 1723248000000 },
-          { id: "hist_20240827_1", type: "expense", category: "shopping", amount: 2000, date: "2024-08-27", note: "手机礼品", createdAt: 1724716800000 },
-          { id: "hist_20240910_1", type: "expense", category: "transport", amount: 4500, date: "2024-09-10", note: "车险取出", createdAt: 1725926400000 },
-          { id: "hist_20240910_2", type: "income", category: "salary", amount: 10500, date: "2024-09-10", note: "工资存入", createdAt: 1725926400001 },
-          { id: "hist_20240920_1", type: "expense", category: "home", amount: 8000, date: "2024-09-20", note: "租房借款", createdAt: 1726790400000 },
-          { id: "hist_20241010_1", type: "income", category: "salary", amount: 10000, date: "2024-10-10", note: "工资存入", createdAt: 1728518400000 },
-          { id: "hist_20241024_1", type: "expense", category: "transport", amount: 3800, date: "2024-10-24", note: "车险取出", createdAt: 1729728000000 },
-          { id: "hist_20241120_1", type: "expense", category: "food", amount: 200, date: "2024-11-20", note: "团购吃饭", createdAt: 1732060800000 },
-          { id: "hist_20241122_1", type: "expense", category: "transport", amount: 10000, date: "2024-11-22", note: "车子定金", createdAt: 1732233600000 },
-          { id: "hist_20241130_1", type: "expense", category: "transport", amount: 50000, date: "2024-11-30", note: "车子尾款", createdAt: 1732924800000 },
-          { id: "hist_20241130_2", type: "expense", category: "transport", amount: 4500, date: "2024-11-30", note: "车子保险", createdAt: 1732924800001 },
-          { id: "hist_20241210_1", type: "income", category: "salary", amount: 10000, date: "2024-12-10", note: "工资存入", createdAt: 1733788800000 },
-          { id: "hist_20241217_1", type: "expense", category: "food", amount: 1000, date: "2024-12-17", note: "请客吃饭", createdAt: 1734393600000 },
-          { id: "hist_20250110_1", type: "income", category: "salary", amount: 10000, date: "2025-01-10", note: "工资存入", createdAt: 1736467200000 },
-          { id: "hist_20250130_1", type: "expense", category: "other_out", amount: 16000, date: "2025-01-30", note: "过年红包", createdAt: 1738195200000 },
-          { id: "hist_20250210_1", type: "income", category: "salary", amount: 10000, date: "2025-02-10", note: "工资存入", createdAt: 1739145600000 },
-          { id: "hist_20250310_1", type: "income", category: "salary", amount: 10000, date: "2025-03-10", note: "工资存入", createdAt: 1741564800000 },
-          { id: "hist_20250410_1", type: "income", category: "salary", amount: 11000, date: "2025-04-10", note: "工资存入", createdAt: 1744243200000 },
-          { id: "hist_20250510_1", type: "income", category: "salary", amount: 4000, date: "2025-05-10", note: "工资存入", createdAt: 1746835200000 },
-          { id: "hist_20250610_1", type: "income", category: "salary", amount: 10000, date: "2025-06-10", note: "工资存入", createdAt: 1749513600000 },
-          { id: "hist_20250622_1", type: "expense", category: "home", amount: 2000, date: "2025-06-22", note: "房租取出", createdAt: 1750550400000 },
-          { id: "hist_20250710_1", type: "income", category: "salary", amount: 6000, date: "2025-07-10", note: "工资存入", createdAt: 1752105600000 },
-          { id: "hist_20250728_1", type: "income", category: "other_in", amount: 15000, date: "2025-07-28", note: "提公积金", createdAt: 1753660800000 },
-          { id: "hist_20250825_1", type: "expense", category: "medical", amount: 10000, date: "2025-08-25", note: "宝宝 picu", createdAt: 1756080000000 },
-          { id: "hist_20250910_1", type: "income", category: "salary", amount: 10000, date: "2025-09-10", note: "工资存入", createdAt: 1757462400000 },
-          { id: "hist_20251010_1", type: "income", category: "salary", amount: 3000, date: "2025-10-10", note: "工资存入", createdAt: 1760054400000 },
-          { id: "hist_20251021_1", type: "expense", category: "other_out", amount: 5000, date: "2025-10-21", note: "奶奶逝世", createdAt: 1761004800000 },
-          { id: "hist_20251029_1", type: "expense", category: "transport", amount: 3000, date: "2025-10-29", note: "电车保险", createdAt: 1761696000000 },
-          { id: "hist_20251110_1", type: "income", category: "salary", amount: 6000, date: "2025-11-10", note: "工资存入", createdAt: 1762732800000 },
-          { id: "hist_20251117_1", type: "income", category: "other_in", amount: 5000, date: "2025-11-17", note: "姨夫还款", createdAt: 1763337600000 },
-          { id: "hist_20251123_1", type: "income", category: "other_in", amount: 3000, date: "2025-11-23", note: "育儿补贴", createdAt: 1763856000000 },
-          { id: "hist_20251210_1", type: "income", category: "salary", amount: 10000, date: "2025-12-10", note: "工资存入", createdAt: 1765324800000 },
-          { id: "hist_20251212_1", type: "expense", category: "shopping", amount: 1500, date: "2025-12-12", note: "老爸手机", createdAt: 1765497600000 },
-          { id: "hist_20251222_1", type: "expense", category: "other_out", amount: 5500, date: "2025-12-22", note: "老婆红包", createdAt: 1766361600000 },
-          { id: "hist_20260110_1", type: "income", category: "salary", amount: 7000, date: "2026-01-10", note: "工资存入", createdAt: 1768003200000 },
-          { id: "hist_20260310_1", type: "income", category: "salary", amount: 6000, date: "2026-03-10", note: "工资存入", createdAt: 1773100800000 },
-          { id: "hist_20260320_1", type: "expense", category: "daily", amount: 2000, date: "2026-03-20", note: "洗碗机", createdAt: 1773964800000 },
-          { id: "hist_20260401_1", type: "expense", category: "other_out", amount: 2000, date: "2026-04-01", note: "老婆红包", createdAt: 1775001600000 },
-          { id: "hist_20260410_1", type: "income", category: "salary", amount: 8000, date: "2026-04-10", note: "工资存入", createdAt: 1775779200000 },
-          { id: "hist_20260425_1", type: "expense", category: "fun", amount: 2000, date: "2026-04-25", note: "卡丁车", createdAt: 1777075200000 },
-          { id: "hist_20260428_1", type: "expense", category: "other_out", amount: 5000, date: "2026-04-28", note: "股票投入", createdAt: 1777334400000 },
-          { id: "hist_20260506_1", type: "income", category: "other_in", amount: 1000, date: "2026-05-06", note: "公积金", createdAt: 1778025600000 },
-          { id: "hist_20260510_1", type: "income", category: "salary", amount: 12000, date: "2026-05-10", note: "工资存入", createdAt: 1778371200000 },
-          { id: "hist_20260514_1", type: "expense", category: "other_out", amount: 3000, date: "2026-05-14", note: "股票投入", createdAt: 1778716800000 },
-          { id: "hist_20260610_1", type: "income", category: "salary", amount: 6000, date: "2026-06-10", note: "工资存入", createdAt: 1781049600000 },
-          { id: "hist_20260624_1", type: "expense", category: "other_out", amount: 47000, date: "2026-06-24", note: "股票投入", createdAt: 1782259200000 },
-          { id: "hist_20260710_1", type: "income", category: "salary", amount: 9000, date: "2026-07-10", note: "工资存入", createdAt: 1783641600000 },
-          { id: "hist_20260712_1", type: "income", category: "other_in", amount: 1000, date: "2026-07-12", note: "公积金", createdAt: 1783814400000 },
-          { id: "hist_20260716_1", type: "expense", category: "other_out", amount: 10000, date: "2026-07-16", note: "股票投入", createdAt: 1784160000000 },
-        ];
       }
 
       function monthList(y, m) {
@@ -2197,11 +2126,10 @@
           const label = isStart
             ? `<div class="d">${CN_MONTH[state.month]}</div>`
             : `<div class="d">${pad(d)}</div>`;
-          // 有账或当日显示金额；纯无账灰格不显示 0.00
-          const amts =
-            hasAmt || isToday
-              ? `<div class="up">${cellAmt(sums.income, "income")}</div><div class="dn">${cellAmt(sums.expense, "expense")}</div>`
-              : "";
+          // 有实际加减才显示金额；0.00（含当日粉格）不显示
+          const amts = hasAmt
+            ? `<div class="up">${cellAmt(sums.income, "income")}</div><div class="dn">${cellAmt(sums.expense, "expense")}</div>`
+            : "";
 
           cells.push(mk(cls, label + amts, date));
         }
@@ -2542,7 +2470,7 @@
         downloadBlob(
           JSON.stringify(
             {
-              app: "assets",
+              app: "money",
               version: 2,
               budget: state.budget,
               exportedAt: new Date().toISOString(),
@@ -2551,7 +2479,7 @@
             null,
             2,
           ),
-          `assets账单_${stamp()}.json`,
+          `money账单_${stamp()}.json`,
           "application/json",
         );
         toast("已导出 JSON");
@@ -2577,7 +2505,7 @@
         );
         downloadBlob(
           "\uFEFF" + [header.join(","), ...rows].join("\n"),
-          `assets账单_${stamp()}.csv`,
+          `money账单_${stamp()}.csv`,
           "text/csv;charset=utf-8",
         );
         toast("已导出 CSV");
