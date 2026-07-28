@@ -8,16 +8,16 @@
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <!-- black-translucent：内容延伸到状态栏下方，由页面自己铺 #0f1419 -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#0f1419" />
-    <meta name="apple-mobile-web-app-title" content="assets" />
+    <!-- default：浅色状态栏 + 深色图标，与页面奶油底色衔接 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#fff8ee" />
+    <meta name="apple-mobile-web-app-title" content="asset" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <title>assets</title>
+    <title>asset</title>
     <style>
       :root {
         --bg: #fff8ee;
-        --status: #0f1419;
+        --status: #fff8ee;
         --card: #ffffff;
         --ink: #222222;
         --muted: #9a9a9a;
@@ -55,7 +55,7 @@
       html,
       body {
         height: 100%;
-        /* 启动闪屏 / 状态栏背后 / 顶部 overscroll 统一用深色 */
+        /* 启动闪屏 / 状态栏背后 / 顶部 overscroll 统一用奶油色 */
         background: var(--status);
       }
       body {
@@ -73,7 +73,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        /* 顶部安全区铺 #0f1419，与系统状态栏颜色衔接 */
+        /* 顶部安全区铺奶油色，与系统状态栏颜色衔接 */
         background:
           linear-gradient(var(--status), var(--status)) top / 100%
             max(var(--safe-t), 0px) no-repeat,
@@ -1221,7 +1221,7 @@
               id="home-prev"
               aria-label="上个月"
             >
-              <img src="assets/nav-prev.svg" alt="" />
+              <img src="asset/nav-prev.svg" alt="" />
             </button>
             <span id="home-month">2026年 07月</span>
             <button
@@ -1230,7 +1230,7 @@
               id="home-next"
               aria-label="下个月"
             >
-              <img src="assets/nav-next.svg" alt="" />
+              <img src="asset/nav-next.svg" alt="" />
             </button>
           </div>
           <div class="sketch cal-card">
@@ -1270,7 +1270,7 @@
               <span id="list-period-label">2026年07月的账目明细</span>
               <img
                 class="cal-icon"
-                src="assets/cal-icon.svg"
+                src="asset/cal-icon.svg"
                 alt=""
                 aria-hidden="true"
               />
@@ -1312,7 +1312,7 @@
               <span id="stats-year">2026年的账单</span>
               <img
                 class="cal-icon"
-                src="assets/cal-icon.svg"
+                src="asset/cal-icon.svg"
                 alt=""
                 aria-hidden="true"
               />
@@ -1360,7 +1360,7 @@
       <section class="screen" id="screen-me">
         <div class="scroll">
           <div class="sketch me-card">
-            <h1>assets</h1>
+            <h1>asset</h1>
             <p>粉黄手绘风 · 数据只保存在本机</p>
           </div>
           <div class="sketch menu-card">
@@ -1694,7 +1694,7 @@
                 id="decade-prev"
                 aria-label="上一组"
               >
-                <img src="assets/nav-prev.svg" alt="" />
+                <img src="asset/nav-prev.svg" alt="" />
               </button>
               <span class="title">年份</span>
               <button
@@ -1703,7 +1703,7 @@
                 id="decade-next"
                 aria-label="下一组"
               >
-                <img src="assets/nav-next.svg" alt="" />
+                <img src="asset/nav-next.svg" alt="" />
               </button>
             </div>
             <button
@@ -1736,7 +1736,7 @@
                 id="period-prev"
                 aria-label="上一页"
               >
-                <img src="assets/nav-prev.svg" alt="" />
+                <img src="asset/nav-prev.svg" alt="" />
               </button>
               <span id="period-nav-label">2026年 07月</span>
               <button
@@ -1745,7 +1745,7 @@
                 id="period-next"
                 aria-label="下一页"
               >
-                <img src="assets/nav-next.svg" alt="" />
+                <img src="asset/nav-next.svg" alt="" />
               </button>
             </div>
             <div id="period-body"></div>
@@ -1816,7 +1816,7 @@
               id="dp-prev"
               aria-label="上个月"
             >
-              <img src="assets/nav-prev.svg" alt="" />
+              <img src="asset/nav-prev.svg" alt="" />
             </button>
             <div class="dp-title" id="dp-title">
               <span class="yr">2026年</span> <span class="mo">7月</span>
@@ -1827,7 +1827,7 @@
               id="dp-next"
               aria-label="下个月"
             >
-              <img src="assets/nav-next.svg" alt="" />
+              <img src="asset/nav-next.svg" alt="" />
             </button>
           </div>
           <div class="dp-week">
@@ -2424,7 +2424,7 @@
         downloadBlob(
           JSON.stringify(
             {
-              app: "assets",
+              app: "asset",
               version: 2,
               budget: state.budget,
               exportedAt: new Date().toISOString(),
@@ -2433,7 +2433,7 @@
             null,
             2,
           ),
-          `assets账单_${stamp()}.json`,
+          `asset账单_${stamp()}.json`,
           "application/json",
         );
         toast("已导出 JSON");
@@ -2459,7 +2459,7 @@
         );
         downloadBlob(
           "\uFEFF" + [header.join(","), ...rows].join("\n"),
-          `assets账单_${stamp()}.csv`,
+          `asset账单_${stamp()}.csv`,
           "text/csv;charset=utf-8",
         );
         toast("已导出 CSV");
