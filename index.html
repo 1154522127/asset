@@ -1563,7 +1563,7 @@
         <div class="scroll">
           <div class="year-title">
             <button type="button" class="year-trigger" id="stats-year-btn">
-              <span id="stats-year">2026年的账单</span>
+              <span id="stats-year">全部账单</span>
               <img
                 class="cal-icon"
                 src="asset/cal-icon.svg"
@@ -1574,18 +1574,18 @@
           </div>
           <div class="sketch sum-card">
             <div class="sum-top">
-              <span class="label" id="stats-bal-label">本年结余</span>
+              <span class="label" id="stats-bal-label">总结余</span>
               <span class="val" id="year-balance">¥0.00</span>
             </div>
             <div class="bar-row">
-              <span id="stats-exp-label">本年支出</span>
+              <span id="stats-exp-label">总支出</span>
               <div class="bar-track">
                 <div class="bar-fill exp" id="year-exp-bar"></div>
               </div>
               <span class="bar-amt" id="year-exp">¥0.00</span>
             </div>
             <div class="bar-row">
-              <span id="stats-inc-label">本年收入</span>
+              <span id="stats-inc-label">总收入</span>
               <div class="bar-track">
                 <div class="bar-fill inc" id="year-inc-bar"></div>
               </div>
@@ -1597,12 +1597,12 @@
             id="stats-list-title"
             style="font-size: 18px; font-weight: 800; margin: 4px 0 10px"
           >
-            账单列表
+            年份列表
           </h2>
 
           <div class="sketch table-card">
             <div class="table-head">
-              <span id="stats-col-label">月份</span><span>支出</span
+              <span id="stats-col-label">年份</span><span>支出</span
               ><span>收入</span><span>结余</span><span></span>
             </div>
             <div id="month-table"></div>
@@ -2135,7 +2135,7 @@
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         selectedDate: todayStr(),
-        statsYear: new Date().getFullYear(),
+        statsYear: "all",
         yearPageStart:
           Math.floor((new Date().getFullYear() - 2015) / 12) * 12 + 2015,
         listMode: "month", // month | year
