@@ -1098,35 +1098,6 @@
         cursor: pointer;
         font-family: inherit;
         font-size: 12px;
-        transition:
-          border-color 0.2s ease,
-          background 0.2s ease,
-          transform 0.22s var(--ease-spring);
-        animation: pop-in 0.34s var(--ease-spring) both;
-      }
-      .cat-btn:nth-child(1) {
-        animation-delay: 0.02s;
-      }
-      .cat-btn:nth-child(2) {
-        animation-delay: 0.05s;
-      }
-      .cat-btn:nth-child(3) {
-        animation-delay: 0.08s;
-      }
-      .cat-btn:nth-child(4) {
-        animation-delay: 0.11s;
-      }
-      .cat-btn:nth-child(5) {
-        animation-delay: 0.14s;
-      }
-      .cat-btn:nth-child(6) {
-        animation-delay: 0.17s;
-      }
-      .cat-btn:nth-child(7) {
-        animation-delay: 0.2s;
-      }
-      .cat-btn:nth-child(8) {
-        animation-delay: 0.23s;
       }
       .cat-btn .ci {
         width: 36px;
@@ -1136,17 +1107,10 @@
         display: grid;
         place-items: center;
         font-size: 18px;
-        transition: transform 0.28s var(--ease-spring);
-      }
-      .cat-btn:active {
-        transform: scale(0.94);
       }
       .cat-btn.on {
         border-color: var(--pink);
         background: #fff5f8;
-      }
-      .cat-btn.on .ci {
-        transform: scale(1.1);
       }
 
       .field {
@@ -3221,7 +3185,9 @@
           const b = e.target.closest(".cat-btn");
           if (!b) return;
           state.formCategory = b.dataset.id;
-          renderCats();
+          $$("#cat-grid .cat-btn").forEach((el) => {
+            el.classList.toggle("on", el.dataset.id === state.formCategory);
+          });
         });
 
         $("#btn-export").addEventListener("click", exportJSON);
