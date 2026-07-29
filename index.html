@@ -41,6 +41,9 @@
         --safe-b: env(safe-area-inset-bottom, 0px);
         --safe-t: env(safe-area-inset-top, 0px);
         --nav-h: 72px;
+        --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+        --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
         --font:
           -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
           "Microsoft YaHei", sans-serif;
@@ -94,13 +97,27 @@
       }
 
       .screen {
-        display: none;
-        flex: 1;
+        position: absolute;
+        inset: 0;
+        display: flex;
         flex-direction: column;
         overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(12px) scale(0.985);
+        transition:
+          opacity 0.3s var(--ease-out),
+          transform 0.38s var(--ease-out),
+          visibility 0.3s;
+        z-index: 1;
       }
       .screen.active {
-        display: flex;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+        z-index: 2;
       }
       .scroll {
         flex: 1;
@@ -157,6 +174,7 @@
         justify-content: center;
         flex-shrink: 0;
         -webkit-tap-highlight-color: transparent;
+        transition: transform 0.2s var(--ease-spring);
       }
       .flip-btn img {
         width: 28px;
@@ -166,7 +184,7 @@
         user-select: none;
       }
       .flip-btn:active {
-        transform: scale(0.92);
+        transform: scale(0.88);
       }
 
       /* ========== 日历格子（对齐示意图） ========== */
@@ -208,6 +226,13 @@
         user-select: none;
         -webkit-user-select: none;
         overflow: hidden;
+        transition:
+          transform 0.18s var(--ease-out),
+          background 0.22s ease,
+          box-shadow 0.22s ease;
+      }
+      .cal-cell:active:not(.out) {
+        transform: scale(0.92);
       }
       .cal-cell::after {
         content: "";
@@ -362,9 +387,37 @@
         text-align: left;
         font-family: inherit;
         color: inherit;
+        border-radius: 10px;
+        transition: background 0.2s ease, transform 0.18s var(--ease-out);
+        animation: rise-in 0.36s var(--ease-out) both;
+      }
+      .tx-row:nth-child(1) {
+        animation-delay: 0.02s;
+      }
+      .tx-row:nth-child(2) {
+        animation-delay: 0.05s;
+      }
+      .tx-row:nth-child(3) {
+        animation-delay: 0.08s;
+      }
+      .tx-row:nth-child(4) {
+        animation-delay: 0.11s;
+      }
+      .tx-row:nth-child(5) {
+        animation-delay: 0.14s;
+      }
+      .tx-row:nth-child(6) {
+        animation-delay: 0.17s;
+      }
+      .tx-row:nth-child(n + 7) {
+        animation-delay: 0.2s;
       }
       .tx-row:last-child {
         border-bottom: 0;
+      }
+      .tx-row:active {
+        background: rgba(230, 120, 137, 0.08);
+        transform: scale(0.985);
       }
       .tx-ico {
         width: 40px;
@@ -375,6 +428,10 @@
         place-items: center;
         font-size: 18px;
         flex-shrink: 0;
+        transition: transform 0.25s var(--ease-spring);
+      }
+      .tx-row:active .tx-ico {
+        transform: scale(1.08) rotate(-6deg);
       }
       .tx-name {
         flex: 1;
@@ -391,6 +448,7 @@
         color: var(--muted);
         padding: 28px 12px;
         font-size: 14px;
+        animation: rise-in 0.4s var(--ease-out) both;
       }
 
       /* Summary card (明细 / 统计) */
@@ -433,6 +491,8 @@
         height: 100%;
         border-radius: 999px;
         min-width: 0;
+        width: 0;
+        transition: width 0.55s var(--ease-out);
       }
       .bar-fill.exp {
         background: var(--yellow);
@@ -577,6 +637,7 @@
         cursor: pointer;
         position: relative;
         line-height: 48px;
+        transition: color 0.22s ease;
       }
       .period-tabs button.on {
         color: var(--pink);
@@ -591,6 +652,7 @@
         height: 3px;
         background: var(--pink);
         border-radius: 3px 3px 0 0;
+        animation: tab-underline 0.28s var(--ease-spring) both;
       }
       .period-nav {
         display: flex;
@@ -822,24 +884,33 @@
         font-weight: 600;
         cursor: pointer;
         font-family: inherit;
+        transition: color 0.22s ease;
       }
       .tab .ico {
         width: 36px;
         height: 36px;
         display: grid;
         place-items: center;
+        transition: transform 0.32s var(--ease-spring);
       }
       .tab .ico svg {
         width: 34px;
         height: 34px;
         display: block;
+        transition: transform 0.32s var(--ease-spring);
       }
       .tab.active {
         color: #1f1f1f;
         font-weight: 800;
       }
       .tab.active .ico {
-        transform: translateY(-1px);
+        transform: translateY(-4px) scale(1.08);
+      }
+      .tab:active .ico {
+        transform: scale(0.9);
+      }
+      .tab.active:active .ico {
+        transform: translateY(-2px) scale(0.96);
       }
       .fab-slot {
         position: relative;
@@ -865,9 +936,25 @@
         place-items: center;
         box-shadow: 0 4px 0 rgba(0, 0, 0, 0.14);
         padding: 0 0 3px;
+        transition:
+          transform 0.38s var(--ease-spring),
+          background 0.28s ease,
+          color 0.28s ease,
+          border-color 0.28s ease,
+          box-shadow 0.28s ease;
       }
       .fab:active {
-        transform: translateX(-50%) scale(0.94);
+        transform: translateX(-50%) scale(0.9);
+      }
+      .fab.open {
+        transform: translateX(-50%) rotate(45deg);
+        background: var(--pink-soft);
+        color: var(--pink);
+        border-color: var(--pink);
+        box-shadow: 0 6px 0 rgba(230, 120, 137, 0.22);
+      }
+      .fab.open:active {
+        transform: translateX(-50%) rotate(45deg) scale(0.92);
       }
 
       /* Overlay / sheet */
@@ -876,11 +963,19 @@
         inset: 0;
         z-index: 50;
         background: rgba(0, 0, 0, 0.35);
-        display: none;
+        display: flex;
         align-items: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity 0.28s ease,
+          visibility 0.28s;
       }
       .overlay.show {
-        display: flex;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
       }
       .sheet {
         width: 100%;
@@ -892,6 +987,12 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        transform: translateY(108%);
+        transition: transform 0.42s var(--ease-sheet);
+        will-change: transform;
+      }
+      .overlay.show .sheet {
+        transform: translateY(0);
       }
       .sheet-head {
         display: flex;
@@ -936,14 +1037,24 @@
         font-weight: 700;
         cursor: pointer;
         color: var(--muted);
+        transition:
+          background 0.25s ease,
+          color 0.25s ease,
+          transform 0.2s var(--ease-spring),
+          box-shadow 0.25s ease;
+      }
+      .type-seg button:active {
+        transform: scale(0.96);
       }
       .type-seg button.on.expense {
         background: var(--yellow-soft);
         color: var(--expense);
+        box-shadow: 0 3px 0 rgba(196, 122, 58, 0.12);
       }
       .type-seg button.on.income {
         background: var(--pink-soft);
         color: var(--pink);
+        box-shadow: 0 3px 0 rgba(230, 120, 137, 0.15);
       }
 
       .amount-box {
@@ -995,6 +1106,35 @@
         cursor: pointer;
         font-family: inherit;
         font-size: 12px;
+        transition:
+          border-color 0.2s ease,
+          background 0.2s ease,
+          transform 0.22s var(--ease-spring);
+        animation: pop-in 0.34s var(--ease-spring) both;
+      }
+      .cat-btn:nth-child(1) {
+        animation-delay: 0.02s;
+      }
+      .cat-btn:nth-child(2) {
+        animation-delay: 0.05s;
+      }
+      .cat-btn:nth-child(3) {
+        animation-delay: 0.08s;
+      }
+      .cat-btn:nth-child(4) {
+        animation-delay: 0.11s;
+      }
+      .cat-btn:nth-child(5) {
+        animation-delay: 0.14s;
+      }
+      .cat-btn:nth-child(6) {
+        animation-delay: 0.17s;
+      }
+      .cat-btn:nth-child(7) {
+        animation-delay: 0.2s;
+      }
+      .cat-btn:nth-child(8) {
+        animation-delay: 0.23s;
       }
       .cat-btn .ci {
         width: 36px;
@@ -1004,10 +1144,17 @@
         display: grid;
         place-items: center;
         font-size: 18px;
+        transition: transform 0.28s var(--ease-spring);
+      }
+      .cat-btn:active {
+        transform: scale(0.94);
       }
       .cat-btn.on {
         border-color: var(--pink);
         background: #fff5f8;
+      }
+      .cat-btn.on .ci {
+        transform: scale(1.1);
       }
 
       .field {
@@ -1068,6 +1215,12 @@
         border-top: 2.5px solid var(--border);
         padding: 18px 18px calc(18px + var(--safe-b));
         overflow: visible;
+        transform: translateY(108%);
+        transition: transform 0.42s var(--ease-sheet);
+        will-change: transform;
+      }
+      .overlay.show .dp-sheet {
+        transform: translateY(0);
       }
       .dp-cat {
         position: absolute;
@@ -1142,16 +1295,23 @@
         display: grid;
         place-items: center;
         position: relative;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          transform 0.18s var(--ease-spring);
       }
       .dp-cell.out {
         color: #d0d0d0;
+      }
+      .dp-cell:active:not(.out) {
+        transform: scale(0.9);
       }
       .dp-cell.on {
         color: #fff;
         background: var(--red-selected);
         border-radius: 12px;
         box-shadow: none;
-        transform: none;
+        transform: scale(1.06);
       }
 
       .btn-main {
@@ -1166,6 +1326,16 @@
         margin-top: 6px;
         cursor: pointer;
         font-family: inherit;
+        transition:
+          transform 0.2s var(--ease-spring),
+          filter 0.2s ease,
+          box-shadow 0.2s ease;
+        box-shadow: 0 4px 0 rgba(180, 70, 90, 0.2);
+      }
+      .btn-main:active {
+        transform: translateY(2px) scale(0.985);
+        box-shadow: 0 1px 0 rgba(180, 70, 90, 0.2);
+        filter: brightness(0.97);
       }
       .btn-danger {
         width: 100%;
@@ -1204,6 +1374,133 @@
       .hidden {
         display: none !important;
       }
+
+      @keyframes rise-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes pop-in {
+        from {
+          opacity: 0;
+          transform: scale(0.82) translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      @keyframes tab-underline {
+        from {
+          transform: scaleX(0.4);
+          opacity: 0;
+        }
+        to {
+          transform: scaleX(1);
+          opacity: 1;
+        }
+      }
+
+      .table-row {
+        transition: background 0.2s ease, transform 0.18s var(--ease-out);
+      }
+      .table-row:active {
+        transform: scale(0.985);
+        background: rgba(230, 120, 137, 0.06);
+      }
+      .month-cell,
+      .year-cell,
+      .stats-all-btn,
+      .menu-item,
+      .year-trigger,
+      .field {
+        transition:
+          transform 0.18s var(--ease-out),
+          background 0.2s ease,
+          color 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .month-cell:active,
+      .year-cell:active,
+      .menu-item:active,
+      .year-trigger:active {
+        transform: scale(0.96);
+      }
+      .menu-item:active {
+        background: rgba(230, 120, 137, 0.06);
+      }
+      .sketch {
+        transition: transform 0.28s var(--ease-out), box-shadow 0.28s ease;
+      }
+      .screen.active .cal-card,
+      .screen.active .sum-card,
+      .screen.active .me-card {
+        animation: rise-in 0.42s var(--ease-out) both;
+      }
+      .screen.active .menu-card {
+        animation: rise-in 0.42s var(--ease-out) 0.06s both;
+      }
+      .screen.active .table-card {
+        animation: rise-in 0.42s var(--ease-out) 0.08s both;
+      }
+
+      /* 左右翻页：双页连续滑动，无中间空白 */
+      .flip-clip {
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+      }
+      .flip-track {
+        display: flex;
+        flex-direction: row;
+        width: 200%;
+        will-change: transform;
+      }
+      .flip-pane {
+        box-sizing: border-box;
+        width: 50%;
+        flex: 0 0 50%;
+        min-width: 0;
+      }
+      .label-flip-next,
+      .label-flip-prev {
+        display: inline-block;
+        animation: label-flip 0.28s var(--ease-out) both;
+      }
+      .label-flip-prev {
+        animation-name: label-flip-rev;
+      }
+      @keyframes label-flip {
+        0% {
+          transform: translateX(12px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+      @keyframes label-flip-rev {
+        0% {
+          transform: translateX(-12px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1236,16 +1533,20 @@
               ><span>三</span><span>四</span><span>五</span
               ><span class="wknd">六</span>
             </div>
-            <div class="cal-grid" id="cal-grid"></div>
-            <div class="month-sum">
-              <span id="home-income"
-                ><span class="sum-label">本月收入:</span>
-                <span class="sum-val">¥ 0.00</span></span
-              >
-              <span id="home-expense"
-                ><span class="sum-label">本月支出:</span>
-                <span class="sum-val">¥ 0.00</span></span
-              >
+            <div class="flip-clip">
+              <div id="home-flip">
+                <div class="cal-grid" id="cal-grid"></div>
+                <div class="month-sum">
+                  <span id="home-income"
+                    ><span class="sum-label">本月收入:</span>
+                    <span class="sum-val">¥ 0.00</span></span
+                  >
+                  <span id="home-expense"
+                    ><span class="sum-label">本月支出:</span>
+                    <span class="sum-val">¥ 0.00</span></span
+                  >
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1693,7 +1994,7 @@
               >
                 <img src="asset/nav-prev.svg" alt="" />
               </button>
-              <span class="title">年份</span>
+              <span class="title" id="decade-label">年份</span>
               <button
                 type="button"
                 class="flip-btn"
@@ -1711,7 +2012,9 @@
             >
               统计所有
             </button>
-            <div class="year-grid" id="year-grid"></div>
+            <div class="flip-clip">
+              <div class="year-grid" id="year-grid"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1745,7 +2048,9 @@
                 <img src="asset/nav-next.svg" alt="" />
               </button>
             </div>
-            <div id="period-body"></div>
+            <div class="flip-clip">
+              <div id="period-body"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1832,7 +2137,9 @@
             ><span>五</span><span class="wknd">六</span
             ><span class="wknd">日</span>
           </div>
-          <div class="dp-grid" id="dp-grid"></div>
+          <div class="flip-clip">
+            <div class="dp-grid" id="dp-grid"></div>
+          </div>
         </div>
       </div>
 
@@ -2027,6 +2334,82 @@
       function setBar(el, value, max) {
         const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
         el.style.width = pct + "%";
+      }
+
+      function prefersReducedMotion() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      }
+
+      /** dir > 0 下一页（左滑），dir < 0 上一页（右滑）；新旧页并排连续滑动 */
+      function flipAnimate(el, dir, updateFn) {
+        if (!el || prefersReducedMotion()) {
+          updateFn();
+          return;
+        }
+        const clip = el.parentElement;
+        if (!clip || !clip.classList.contains("flip-clip")) {
+          updateFn();
+          return;
+        }
+
+        if (typeof clip._flipCleanup === "function") {
+          clip._flipCleanup();
+        }
+
+        const oldHTML = el.innerHTML;
+        updateFn();
+        const newHTML = el.innerHTML;
+
+        const track = document.createElement("div");
+        track.className = "flip-track";
+        const makePane = (html) => {
+          const pane = document.createElement("div");
+          pane.className = `${el.className ? el.className + " " : ""}flip-pane`;
+          pane.innerHTML = html;
+          return pane;
+        };
+
+        if (dir > 0) {
+          track.append(makePane(oldHTML), makePane(newHTML));
+          track.style.transform = "translateX(0)";
+        } else {
+          track.append(makePane(newHTML), makePane(oldHTML));
+          track.style.transform = "translateX(-50%)";
+        }
+
+        el.style.display = "none";
+        clip.appendChild(track);
+
+        const cleanup = () => {
+          track.removeEventListener("transitionend", onEnd);
+          if (track.parentNode) track.remove();
+          el.style.display = "";
+          el.innerHTML = newHTML;
+          clip._flipCleanup = null;
+        };
+        clip._flipCleanup = cleanup;
+
+        const onEnd = (e) => {
+          if (e.target !== track) return;
+          cleanup();
+        };
+        track.addEventListener("transitionend", onEnd);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            track.style.transition =
+              "transform 0.34s cubic-bezier(0.22, 1, 0.36, 1)";
+            track.style.transform =
+              dir > 0 ? "translateX(-50%)" : "translateX(0)";
+          });
+        });
+      }
+
+      function flipLabel(el, dir) {
+        if (!el || prefersReducedMotion()) return;
+        el.classList.remove("label-flip-next", "label-flip-prev");
+        void el.offsetWidth;
+        el.classList.add(dir > 0 ? "label-flip-next" : "label-flip-prev");
       }
 
       // ---------- render home ----------
@@ -2326,10 +2709,12 @@
         $("#form-delete").classList.toggle("hidden", !tx);
         syncType();
         renderCats();
+        $("#fab-add").classList.add("open");
         $("#overlay-form").classList.add("show");
-        setTimeout(() => $("#f-amount").focus(), 150);
+        setTimeout(() => $("#f-amount").focus(), 280);
       }
       function closeForm() {
+        $("#fab-add").classList.remove("open");
         $("#overlay-form").classList.remove("show");
         state.editingId = null;
       }
@@ -2534,6 +2919,7 @@
       }
       function renderYearGrid() {
         const start = state.yearPageStart;
+        $("#decade-label").textContent = `${start} - ${start + 11}`;
         $("#stats-all-btn").classList.toggle("on", state.statsYear === "all");
         const cells = [];
         for (let i = 0; i < 12; i++) {
@@ -2609,7 +2995,10 @@
           state.dpMonth = 0;
           state.dpYear++;
         }
-        renderDatePicker();
+        flipAnimate($("#dp-grid"), delta, () => {
+          flipLabel($("#dp-title"), delta);
+          renderDatePicker();
+        });
       }
 
       function openPeriodPicker() {
@@ -2674,8 +3063,11 @@
         const dim = new Date(state.year, state.month + 1, 0).getDate();
         const day = Math.min(Number(state.selectedDate.slice(8, 10)), dim);
         state.selectedDate = `${state.year}-${pad(state.month + 1)}-${pad(day)}`;
-        renderHome();
-        renderList();
+        flipAnimate($("#home-flip"), delta, () => {
+          flipLabel($("#home-month"), delta);
+          renderHome();
+          renderList();
+        });
       }
 
       function bind() {
@@ -2690,22 +3082,35 @@
         $("#list-period-btn").addEventListener("click", openPeriodPicker);
         $$("#period-tabs button").forEach((btn) => {
           btn.addEventListener("click", () => {
+            if (state.pickerMode === btn.dataset.mode) return;
+            const dir = btn.dataset.mode === "year" ? 1 : -1;
             state.pickerMode = btn.dataset.mode;
             $$("#period-tabs button").forEach((b) =>
               b.classList.toggle("on", b === btn),
             );
-            renderPeriodPicker();
+            flipAnimate($("#period-body"), dir, () => {
+              flipLabel($("#period-nav-label"), dir);
+              renderPeriodPicker();
+            });
           });
         });
         $("#period-prev").addEventListener("click", () => {
+          const dir = -1;
           if (state.pickerMode === "year") state.pickerYear -= 12;
           else state.pickerYear--;
-          renderPeriodPicker();
+          flipAnimate($("#period-body"), dir, () => {
+            flipLabel($("#period-nav-label"), dir);
+            renderPeriodPicker();
+          });
         });
         $("#period-next").addEventListener("click", () => {
+          const dir = 1;
           if (state.pickerMode === "year") state.pickerYear += 12;
           else state.pickerYear++;
-          renderPeriodPicker();
+          flipAnimate($("#period-body"), dir, () => {
+            flipLabel($("#period-nav-label"), dir);
+            renderPeriodPicker();
+          });
         });
         $("#period-body").addEventListener("click", (e) => {
           const monthBtn = e.target.closest("[data-month]");
@@ -2747,11 +3152,17 @@
         $("#stats-year-btn").addEventListener("click", openYearPicker);
         $("#decade-prev").addEventListener("click", () => {
           state.yearPageStart -= 12;
-          renderYearGrid();
+          flipAnimate($("#year-grid"), -1, () => {
+            flipLabel($("#decade-label"), -1);
+            renderYearGrid();
+          });
         });
         $("#decade-next").addEventListener("click", () => {
           state.yearPageStart += 12;
-          renderYearGrid();
+          flipAnimate($("#year-grid"), 1, () => {
+            flipLabel($("#decade-label"), 1);
+            renderYearGrid();
+          });
         });
         $("#stats-all-btn").addEventListener("click", () => {
           state.statsYear = "all";
